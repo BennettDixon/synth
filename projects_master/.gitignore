@@ -1,0 +1,4 @@
+# ignore files in git status
+
+cached pyfiles
+*__pycache__*
