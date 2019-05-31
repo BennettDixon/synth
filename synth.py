@@ -3,6 +3,7 @@ import click
 import os
 import shutil
 
+
 @click.command()
 @click.option("--name",
               default="my_project",
@@ -30,8 +31,8 @@ def synth(name, frontend, backend, database):
     else:
         raise FileExistsError('Directory {} exists.'.format(name))
 
-    shutil.copyfile("/etc/synth/projects_master/docker_compose.yml",
-                    "{}/docker_compose.yml".format(name))
+    shutil.copyfile("/etc/synth/projects_master/docker-compose.yml",
+                    "{}/docker-compose.yml".format(name))
 
     if frontend in allowed_front:
         if frontend == "static":
@@ -45,10 +46,10 @@ def synth(name, frontend, backend, database):
                             "styles/common.css")
             shutil.copyfile(copy_dir + "frontend/static/styles/header.css",
                             "{}/nginx_router/frontend/static/".format(name) +
-                             "styles/header.css")
+                            "styles/header.css")
             shutil.copyfile(copy_dir + "frontend/static/styles/footer.css",
                             "{}/nginx_router/frontend/static/".format(name) +
-                             "styles/footer.css")
+                            "styles/footer.css")
             shutil.copyfile(copy_dir + "nginx_conf/default.conf",
                             "{}/nginx_router/nginx_conf/default.conf"
                             .format(name))
@@ -60,7 +61,7 @@ def synth(name, frontend, backend, database):
             pass
         if frontend == "react":
             pass
-    
+
+
 if __name__ == "__main__":
     synth()
-
