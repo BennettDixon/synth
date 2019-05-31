@@ -1,7 +1,12 @@
 # DEVELOPMENT DOCKER FILE
+
 # for use when developing application
 # nginx is used as router for all containers
 # and is the only container exposed to the host
+
+# see docker compose for forwarding information
+# NGINX is configured to receive TCP traffic on port 80
+# the default port forwarded to host by container is 8800
 FROM nginx
 
 # copy the nginx server configuration
