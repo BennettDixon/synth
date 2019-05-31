@@ -37,7 +37,7 @@ def synth(name, frontend, backend, database):
     if frontend in allowed_front:
         if frontend == "static":
             os.makedirs("{}/nginx_router/frontend/static/styles".format(name))
-            os.mkdir("{}/nginx_router/nginx_conf")
+            os.mkdir("{}/nginx_router/nginx_conf".format(name))
             shutil.copyfile(copy_dir + "frontend/static/index.html",
                             "{}/nginx_router/frontend/static/index.html"
                             .format(name))
