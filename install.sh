@@ -9,7 +9,7 @@ pip3 install click
 
 echo 'Installing bootstrap projects...'
 # setup content in /etc
-mkdir -p /etc/synth/projects_master
+mkdir -p /etc/synth
 cp -R ./projects_master/ /etc/synth/projects_master/
 
 echo 'Creating executable in /usr/bin...'
