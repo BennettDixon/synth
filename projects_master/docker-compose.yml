@@ -1,0 +1,9 @@
+version: "3"
+services:
+  nginx:
+    restart: always
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./nginx_router
+    ports:
+      - "8800:80"
