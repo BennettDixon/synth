@@ -30,22 +30,37 @@ def synth(name, frontend, backend, database):
     else:
         raise FileExistsError('Directory {} exists.'.format(name))
 
+    shutil.copyfile("/etc/synth/projects_master/docker_compose.yml",
+                    "{}/docker_compose.yml".format(name))
+
     if frontend in allowed_front:
         if frontend == "static":
-            os.mkdirs("{}/nginx_router/frontend/static".format(name))
+            os.mkdirs("{}/nginx_router/frontend/static/styles".format(name))
             os.mkdir("{}/nginx_router/nginx_conf")
             shutil.copyfile(copy_dir + "frontend/static/index.html",
                             "{}/nginx_router/frontend/static/index.html"
                             .format(name))
-            shutil.copyfile(copy_dir + "frontend/static/default.conf",
+            shutil.copyfile(copy_dir + "frontend/static/styles/common.css",
+                            "{}/nginx_router/frontend/static/".format(name)) +
+                             "styles/common.css"
+            shutil.copyfile(copy_dir + "frontend/static/styles/header.css",
+                            "{}/nginx_router/frontend/static/".format(name)) +
+                             "styles/header.css"
+            shutil.copyfile(copy_dir + "frontend/static/styles/footer.css",
+                            "{}/nginx_router/frontend/static/".format(name)) +
+                             "styles/footer.css"
+            shutil.copyfile(copy_dir + "nginx_conf/default.conf",
                             "{}/nginx_router/nginx_conf/default.conf"
+                            .format(name))
+            shutil.copyfile(copy_dir + "nginx_conf/nginx.conf",
+                            "{}/nginx_router/nginx_conf/nginx.conf"
                             .format(name))
 
         if frontend == "node":
             pass
         if frontend == "react":
             pass
-
-    print(frontend)
-    print('hi')
     
+if __name__ == "__main__":
+    synth()
+
