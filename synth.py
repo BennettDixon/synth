@@ -20,6 +20,7 @@ def synth(name, frontend, backend, database):
     """ creates a synth wireframe with your desired frontend,
     backend, and database
     """
+    copy_dir = "/etc/synth/projects_master/nginx_router/"
     allowed_front = ["static", "node", "react"]
     allowed_back = ["node", "flask", "django"]
     allowed_db = ["mysql", "postgres", "mongodb"]
@@ -28,13 +29,23 @@ def synth(name, frontend, backend, database):
         os.mkdir(name)
     else:
         raise FileExistsError('Directory {} exists.'.format(name))
-    
-    if frontend == "static":
-        os.mkdirs("{}/nginx_router/frontend/static".format(name))
-        os.mkdir("{}/nginx_router/nginx_conf")
-        shutil.copyfile("/usr/bin/synth/master/index.html",
-                        "{}/nginx_router/frontend/static/index.html"
-                        .format(name))
+
+    if frontend in allowed_front:
+        if frontend == "static":
+            os.mkdirs("{}/nginx_router/frontend/static".format(name))
+            os.mkdir("{}/nginx_router/nginx_conf")
+            shutil.copyfile(copy_dir + "frontend/static/index.html",
+                            "{}/nginx_router/frontend/static/index.html"
+                            .format(name))
+            shutil.copyfile(copy_dir + "frontend/static/default.conf",
+                            "{}/nginx_router/nginx_conf/default.conf"
+                            .format(name))
+
+        if frontend == "node":
+            pass
+        if frontend == "react":
+            pass
+
     print(frontend)
     print('hi')
     
