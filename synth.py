@@ -37,7 +37,8 @@ def synth(name, frontend, backend, database):
 
     #<--- FRONTEND SECTION --->#
     if frontend in allowed_front:
-        #<--- NGINX ROUTER SECTION --->#
+        #<---      NGINX ROUTER SECTION     --->#
+        #   - handles all container routing -   #
         os.makedirs("{}/nginx_router/nginx_conf".format(name))
         # NGINX config files
         shutil.copyfile(copy_dir + "nginx_conf/default.conf",
