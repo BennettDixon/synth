@@ -31,26 +31,30 @@ def synth(name, frontend, backend, database):
     else:
         raise FileExistsError('Directory {} exists.'.format(name))
 
-    #<--- COMPOSE SECTION --->#
+    #<---      NGINX ROUTER SECTION     --->#
+    #   - handles all container routing -   #
+    #   -     thus needed by default    -   #
+    os.makedirs("{}/nginx_router/nginx_conf".format(name))
+    # NGINX config files
+    shutil.copyfile(copy_dir + "nginx_conf/default.conf",
+                    "{}/nginx_router/nginx_conf/default.conf"
+                    .format(name))
+    shutil.copyfile(copy_dir + "nginx_conf/nginx.conf",
+                    "{}/nginx_router/nginx_conf/nginx.conf"
+                    .format(name))
+    # NGINX docker file
+    shutil.copyfile(copy_dir + "Dockerfile.dev",
+                    "{}/nginx_router/Dockerfile.dev"
+                    .format(name))
+
+    #<---        COMPOSE SECTION        --->#
+    #   -  base compose file for router -   #
+    #   -   gets appended to as needed  -   #
     shutil.copyfile("/etc/synth/projects_master/docker-compose.yml",
                     "{}/docker-compose.yml".format(name))
 
     #<--- FRONTEND SECTION --->#
     if frontend in allowed_front:
-        #<---      NGINX ROUTER SECTION     --->#
-        #   - handles all container routing -   #
-        os.makedirs("{}/nginx_router/nginx_conf".format(name))
-        # NGINX config files
-        shutil.copyfile(copy_dir + "nginx_conf/default.conf",
-                        "{}/nginx_router/nginx_conf/default.conf"
-                        .format(name))
-        shutil.copyfile(copy_dir + "nginx_conf/nginx.conf",
-                        "{}/nginx_router/nginx_conf/nginx.conf"
-                        .format(name))
-        # NGINX docker file
-        shutil.copyfile(copy_dir + "Dockerfile.dev",
-                        "{}/nginx_router/Dockerfile.dev"
-                        .format(name))
 
         #<--- STATIC FRONTEND SECTION --->#
         if frontend == "static":
