@@ -35,6 +35,7 @@ def synth(name, frontend, backend, database):
     #   - handles all container routing -   #
     #   -     thus needed by default    -   #
     os.makedirs("{}/nginx_router/nginx_conf".format(name))
+
     # NGINX config files
     shutil.copyfile(copy_dir + "nginx_conf/default.conf",
                     "{}/nginx_router/nginx_conf/default.conf"
@@ -42,6 +43,7 @@ def synth(name, frontend, backend, database):
     shutil.copyfile(copy_dir + "nginx_conf/nginx.conf",
                     "{}/nginx_router/nginx_conf/nginx.conf"
                     .format(name))
+
     # NGINX docker file
     shutil.copyfile(copy_dir + "Dockerfile.dev",
                     "{}/nginx_router/Dockerfile.dev"
@@ -59,6 +61,7 @@ def synth(name, frontend, backend, database):
         #<--- STATIC FRONTEND SECTION --->#
         if frontend == "static":
             os.makedirs("{}/nginx_router/frontend/static/styles".format(name))
+
             # static CSS & HTML content
             shutil.copyfile(copy_dir + "frontend/static/index.html",
                             "{}/nginx_router/frontend/static/index.html"
