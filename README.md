@@ -80,7 +80,7 @@ $ pep8 --version
 
 ## :blue_book: Authors
 * **Bennett Dixon** - [@BennettDixon](https://github.com/BennettDixon)
-
+* **Jack Gindi** - [@jmgindi](https://github.com/jmgindi)
 
 
 ## :mag: License
