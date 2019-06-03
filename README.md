@@ -1,45 +1,60 @@
-# :ocean: Python 3.4 Projects :ocean:
+# synth - a Docker bootstrapping tool
 
-In this Python repo I will be completing python assignments at Holberton School. This will also contain personal Python projects, those projects can be found under <code>0xFF-personal_projects</code>. 
-
-All Holberton Python projects will be found in the <code>0x00-0xEE</code> projects.
-
-All code follows <code>pep8</code> style per Holberton specifications. Personal project code will either follow <code>pep8</code> or the new <code>pycodestyle</code>.
+Inspired by how long it can take to set up the development of web apps, synth is a tool to help you build modular sets of Docker files, Docker Compose files, directory trees, and wireframed files for different web frameworks. synth can help you set up your next web application project in seconds, allowing you to start coding your idea with zero hassle.
 
 ## :running: Getting Started
 
 * [Ubuntu 14.04 LTS](http://releases.ubuntu.com/14.04/) - Operating system reqd.
 
-* [GCC 4.8.4](https://gcc.gnu.org/gcc-4.8/) - Compiler used
+* [Python 3.4](https://www.python.org/downloads/release/python-340/) - Python version used
 
-* [Python 3.4](https://www.python.org/download/releases/3.4.0/) - Python Version Used
+* [Node.js 12.3.1](https://nodejs.org/en/download/current/) - Node version used
 
-## :warning: Prerequisites
+## :warning: Dependencies
 
-* Must have `git` installed
+* `docker` and `docker-compose`
 
-* Must have repository cloned
+* `python3`
 
-* Must have `python3` installed
+* `node`
 
-* Some problems are written in C, those require `gcc`
-
-```
-$ sudo apt-get install git
-```
-
-```
-$ sudo apt-get install python3
-```
-
-
-## :arrow_down: Installing
+## :arrow_down: Installation
 
 Clone the repository into a new directory
 
 ```
-$ git clone https://github.com/BennettDixon/holbertonschool-higher_level_programming.git
+$ git clone https://github.com/BennettDixon/synth.git
 ```
+
+Run the installer script
+
+```
+./install.sh
+```
+
+## Usage
+
+```
+synth [OPTIONS]
+```
+
+## Options
+
+`--frontend`
+
+	Your frontend framework. Options are `static` (default), `node`, `react`. Defaults to `static`.
+
+`--backend`
+
+	Your backend framework. Options are `flask`, `node`, `django`.
+
+`--database`
+
+	Your choice of database. Options are `mysql`, `postgres`, `mongo`.
+
+`--cache`
+
+	Your choice of caching tool. Options are `redis` and `memcache`.
 
 ## :books: Coding Style Tests
 
@@ -47,19 +62,13 @@ Strictly followed `pep8` style guide. To install
 
 ### Regular Ubuntu 14.04 install
 
+With apt-get
+
 ```
 $ sudo apt-get install python3-pep8
 ```
 
-### Using Pip3
-
-Install Pip3
-
-```
-$ sudo apt-get install python3-pip
-```
-
-Install Pep8
+With pip3
 
 ```
 $ pip3 install pep8
@@ -76,19 +85,20 @@ $ pep8 --version
 
 * 0.1.0
 
+## Contributing
 
+See [CONTRIBUTING.md]
 
 ## :blue_book: Authors
 * **Bennett Dixon** - [@BennettDixon](https://github.com/BennettDixon)
 * **Jack Gindi** - [@jmgindi](https://github.com/jmgindi)
 
-
 ## :mag: License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
-
-
 ## :mega: Acknowledgments
 
-* Holberton School (providing guidance)
+* [Holberton School](https://github.com/holbertonschool) (providing guidance)
+
+* [Julian Gindi](https://github.com/JulianGindi) (project mentor)
