@@ -40,20 +40,26 @@ synth [OPTIONS]
 
 ## Options
 
-`--frontend`
+```
+--frontend
+```
 
 	Your frontend framework. Options are `static` (default), `node`, `react`. Defaults to `static`.
 
-`--backend`
+```
+--backend
+```
 
 	Your backend framework. Options are `flask`, `node`, `django`.
-
-`--database`
+```
+--database
+```
 
 	Your choice of database. Options are `mysql`, `postgres`, `mongo`.
 
-`--cache`
-
+```
+--cache
+```
 	Your choice of caching tool. Options are `redis` and `memcache`.
 
 ## :books: Coding Style Tests
