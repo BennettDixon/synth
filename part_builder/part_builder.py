@@ -9,6 +9,7 @@
     Functions primarily do text appending,
     CLI logic is enclosed in synth.py
 """
+import os
 from part_builder import PartBuilderException
 
 
@@ -21,38 +22,40 @@ class PartBuilder():
     allowed_backends = ['node', 'flask', 'django']
     allowed_databases = ['mongo', 'postgres', 'mysql']
     # TODO not yet implemented
-    # allowed_caches = ['redis', 'memcache']
+    #allowed_caches = ['redis', 'memcache']
 
-    def __init__(self, parts_root=None, nginx_root=None, compose_root=None):
+    # gets populated on init of a PartBuilder object
+    allowed_master = []
+
+    def __init__(self, parts_root=None, nginx_file=None, compose_file=None):
         """
             Init method for class, sets important path information
         """
-        # should be the path ending in /parts (parts directory)
-        self.parts_root = parts_root
-        self.nginx_root = nginx_root
-        self.compose_root = compose_root
-
-    def add_frontend(self, frontend=None):
-        """
-            adds a frontend based on a string passed
-
-            Based on:
-                frontend: string representing frontend,
-                    e.g: static
-        """
-        self.none_check(frontend, "Cannot add frontend of None")
-        frontend = frontend.lower()
-        # append neccessary content for the frontend to the compose and nginx config files
-        if frontend in self.allowed_frontends:
-            compose_add(self.parts_root +
-                        '/compose/{}.part'.format(frontend), self.compose_root)
-            upstream_add(
-                self.parts_root + '/nginx/upstream/{}.part'.format(frontend), self.nginx_root)
-            location_add(
-                self.parts_root + '/nginx/location/{}.part'.format(frontend), self.nginx_root)
-        else:
+        # do some checking on the config info passed
+        self.none_check(
+            parts_root, "root to parts directory can't be None in PartBuilder init function")
+        self.none_check(
+            nginx_file, "default.conf file for NGINX router can't be None in PartBuilder init function")
+        self.none_check(
+            compose_file, "compose file can't be None in PartBuilder init function")
+        if not self.isfile_check:
             raise PartBuilderException(
-                "Frontend provided to PartsBuilder not in allowed frontends")
+                nginx_file, "{} is not a file or does not exist".format(nginx_file))
+        if not self.isfile_check:
+            raise PartBuilderException(
+                compose_file, "{} is not a file or does not exist".format(
+                    compose_file)
+            )
+
+        # if all is good we got here without raising an exception, set instance to init info
+        self.parts_root = parts_root
+        self.nginx_file = nginx_file
+        self.compose_file = compose_file
+        self.allowed_master.extend(self.allowed_frontends)
+        self.allowed_master.extend(self.allowed_backends)
+        self.allowed_master.extend(self.allowed_databases)
+        # TODO caches not yet implemented
+        # self.allowed_master.extend(self.allowed_caches)
 
     @staticmethod
     def none_check(param=None, err_msg="Path Error"):
@@ -67,6 +70,45 @@ class PartBuilder():
         if param is None:
             raise PartBuilderException(err_msg)
 
+    @staticmethod
+    def isfile_check(path=None):
+        """
+            Checks if a file exists at a given path
+
+            Based on:
+                path: string containing file path to check
+        """
+        if path is None:
+            return False
+        return os.path.isfile(path)
+
+    def add_part(self, part=None):
+        """
+            adds a frontend based on a string passed
+
+            Based on:
+                part: string representing part to add,
+                    e.g: static
+        """
+        self.none_check(part, "PartBuilder cannot add part of None")
+        if type(part) != str:
+            raise PartBuilderException(
+                "part provided to PartBuilder ({}) is not of string type".format(
+                    part)
+            )
+        part = part.lower()
+        # append neccessary content for the part to the compose and nginx config files
+        if part in self.allowed_master:
+            self.compose_add(self.parts_root +
+                             '/compose/{}.part'.format(part), self.compose_file)
+            self.upstream_add(self.parts_root +
+                              '/nginx/upstream/{}.part'.format(part), self.nginx_file)
+            self.location_add(self.parts_root +
+                              '/nginx/location/{}.part'.format(part), self.nginx_file)
+        else:
+            raise PartBuilderException(
+                "part provided to PartBuilder ({}) is not in allowed_master".format(part))
+
     def compose_add(self, part_path=None, config_path=None):
         """
             Adds a part to the master docker-compose file
@@ -80,10 +122,17 @@ class PartBuilder():
 
         self.none_check(part_path, path_err)
         self.none_check(config_path, config_err)
+        # all parts should have a compose portion
+        if self.isfile_check(part_path) is False:
+            raise PartBuilderException(
+                "{} is not a file or did not exist.".format(part_path))
+        # TODO add the actual append logic
 
     def upstream_add(self, part_path=None, config_path=None):
         """
             Adds an upstream to the NGINX router default.conf file
+
+            ONLY needed for frontend and backend portions
 
             Based on:
                 part_path: path to the part containing the upstream
@@ -94,6 +143,10 @@ class PartBuilder():
 
         self.none_check(part_path, path_err)
         self.none_check(config_path, config_err)
+        # skip if it's not present (not an error b/c database and cache are always not present)
+        if self.isfile_check(part_path) is False:
+            return None
+        # TODO add the actual append logic
 
     def location_add(self, part_path=None, config_path=None):
         """
@@ -110,3 +163,7 @@ class PartBuilder():
 
         self.none_check(part_path, path_err)
         self.none_check(config_path, config_err)
+        # skip if it's not present (not an error b/c database and cache are always not present)
+        if self.isfile_check(part_path) is False:
+            return None
+        # TODO add the actual append logic
