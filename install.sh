@@ -8,9 +8,13 @@ echo 'Python 3.4+ is required to run synth!'
 pip3 install click
 
 # setup content in /etc
+if [ -d  "/etc/synth" ]; then
+    echo 'Prior installation detected, removing old /etc/synth directory...'
+    rm -rf /etc/synth
+fi
 echo 'Installing bootstrap projects in /etc/synth...'
 mkdir -p /etc/synth
-cp -R ./projects_master/ /etc/synth/projects_master/
+cp -R ./projects_master/ /etc/synth/projects_master
 
 # setup executable in /usr/local/bin
 echo 'Creating executable in /usr/local/bin...'
