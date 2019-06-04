@@ -82,7 +82,7 @@ class PartBuilder():
 
     def add_part(self, part=None):
         """
-            adds a frontend based on a string passed
+            adds a part to compose and nginx files based on a string passed
 
             Based on:
                 part: string representing part to add,
