@@ -29,12 +29,12 @@ class PartBuilder():
             Init method for class, sets important path information
         """
         # do some checking on the config info passed
-        self.none_check(
-            parts_root, "root to parts directory can't be None in PartBuilder init function")
-        self.none_check(
-            nginx_file, "default.conf file for NGINX router can't be None in PartBuilder init function")
-        self.none_check(
-            compose_file, "compose file can't be None in PartBuilder init function")
+        self.str_check(
+            parts_root, "root to parts directory must be of type string in PartBuilder init function")
+        self.str_check(
+            nginx_file, "default.conf file for NGINX router must be of type string in PartBuilder init function")
+        self.str_check(
+            compose_file, "compose file must be of type string in PartBuilder init function")
         if not self.isfile_check:
             raise PartBuilderException(
                 nginx_file, "{} is not a file or does not exist".format(nginx_file))
@@ -56,7 +56,7 @@ class PartBuilder():
         # self.allowed_master.extend(self.allowed_caches)
 
     @staticmethod
-    def none_check(param=None, err_msg="Path Error"):
+    def str_check(param=None, err_msg="Path Error"):
         """
             Checks that variables passed to PartBuilder functions
             are not None and exist
@@ -66,6 +66,8 @@ class PartBuilder():
                 err_msg: error message to output
         """
         if param is None:
+            raise PartBuilderException(err_msg)
+        elif type(param) != str:
             raise PartBuilderException(err_msg)
 
     @staticmethod
@@ -88,12 +90,8 @@ class PartBuilder():
                 part: string representing part to add,
                     e.g: static
         """
-        self.none_check(part, "PartBuilder cannot add part of None")
-        if type(part) != str:
-            raise PartBuilderException(
-                "part provided to PartBuilder ({}) is not of string type".format(
-                    part)
-            )
+        self.str_check(
+            part, "PartBuilder cannot add part of type {}".format(type(part)))
         part = part.lower()
         # append neccessary content for the part to the compose and nginx config files
         if part in self.allowed_master:
@@ -115,11 +113,11 @@ class PartBuilder():
                 part_path: path to the part to add
                 compose_path: path to master compose file to add to
         """
-        path_err = "Path to compose service part (part_path) can't be None"
-        config_err = "Path to docker-compose file (config_path) can't be None"
+        path_err = "Path to compose service part (part_path) must be of string type"
+        config_err = "Path to docker-compose file (config_path) must be of string type"
 
-        self.none_check(part_path, path_err)
-        self.none_check(config_path, config_err)
+        self.str_check(part_path, path_err)
+        self.str_check(config_path, config_err)
         # all parts should have a compose portion
         if self.isfile_check(part_path) is False:
             raise PartBuilderException(
@@ -138,11 +136,11 @@ class PartBuilder():
                 part_path: path to the part containing the upstream
                 config_path: path to the NGINX router default.conf file
         """
-        path_err = "Path to upstream part (part_path) can't be None"
-        config_err = "Path to NGINX router file (config_path) can't be None"
+        path_err = "Path to upstream part (part_path) must be of string type"
+        config_err = "Path to NGINX router file (config_path) must be of string type"
 
-        self.none_check(part_path, path_err)
-        self.none_check(config_path, config_err)
+        self.str_check(part_path, path_err)
+        self.str_check(config_path, config_err)
         # skip if it's not present (not an error b/c database and cache are always not present)
         if self.isfile_check(part_path) is False:
             return None
@@ -160,11 +158,11 @@ class PartBuilder():
                 part_path: path to the part containing the location
                 config_path: path to the NGINX router default.conf file
         """
-        path_err = "Path to location part (part_path) can't be None"
-        config_err = "Path to NGINX router file (config_path) can't be None"
+        path_err = "Path to location part (part_path) must be of string type"
+        config_err = "Path to NGINX router file (config_path) must be of string type"
 
-        self.none_check(part_path, path_err)
-        self.none_check(config_path, config_err)
+        self.str_check(part_path, path_err)
+        self.str_check(config_path, config_err)
         # skip if it's not present (not an error b/c database and cache are always not present)
         if self.isfile_check(part_path) is False:
             return None
