@@ -3,8 +3,11 @@ import click
 import os
 import shutil
 
+@click.group()
+def cli():
+    pass
 
-@click.command()
+@cli.command()
 @click.option("--name",
               default="my_project",
               help="name of your project")
@@ -17,15 +20,15 @@ import shutil
 @click.option("--database",
               default=None,
               help="database to use")
-def synth(name, frontend, backend, database):
+def create(name, frontend, backend, database):
     """ creates a synth wireframe with your desired frontend,
     backend, and database
     """
     copy_dir = "/etc/synth/projects_master/nginx_router/"
     allowed_front = ["static", "node", "react"]
     allowed_back = ["node", "flask", "django"]
-    allowed_db = ["mysql", "postgres", "mongodb"]
-
+    allowed_db = ["mysql", "postgres", "mongodb"]    
+    
     if not os.path.exists(name):
         os.mkdir(name)
     else:
@@ -60,27 +63,59 @@ def synth(name, frontend, backend, database):
 
         #<--- STATIC FRONTEND SECTION --->#
         if frontend == "static":
-            os.makedirs("{}/nginx_router/frontend/static/styles".format(name))
-
-            # static CSS & HTML content
-            shutil.copyfile(copy_dir + "frontend/static/index.html",
-                            "{}/nginx_router/frontend/static/index.html"
+            shutil.copytree(copy_dir + "frontend/static/",
+                            "{}/nginx_router/frontend/static/"
                             .format(name))
-            shutil.copyfile(copy_dir + "frontend/static/styles/common.css",
-                            "{}/nginx_router/frontend/static/".format(name) +
-                            "styles/common.css")
-            shutil.copyfile(copy_dir + "frontend/static/styles/header.css",
-                            "{}/nginx_router/frontend/static/".format(name) +
-                            "styles/header.css")
-            shutil.copyfile(copy_dir + "frontend/static/styles/footer.css",
-                            "{}/nginx_router/frontend/static/".format(name) +
-                            "styles/footer.css")
-
-        if frontend == "node":
+    
+        elif frontend == "node":
             pass
-        if frontend == "react":
+        elif frontend == "react":
             pass
 
+    else:
+        # error out if frontend isn't allowed
+        click.echo('Frontend {} not allowed: synth --help for more info'
+                   .format(frontend))
+        exit(1)
 
+    #<--- BACKEND SECTION --->#
+    if backend in allowed_back:
+
+        #<--- FLASK BACKEND SECTION --->#
+        if backend == "flask":
+            shutil.copytree(copy_dir + "backend/flask/",
+                            "{}/nginx_router/backend/flask/".format(name))
+
+        elif backend == "node":
+            pass
+
+        elif backend == "django":
+            pass
+
+        else:
+            # error out if backend isn't allowed
+            click.echo('Backend {} is not allowed: synth --help for more info'
+                       .format(backend))
+            exit(1)
+
+    #<--- DATABASE SECTION --->#
+    if database in allowed_db:
+
+        #<--- --->#
+        if database == "mysql":
+            pass
+        
+        elif backend == "mongo":
+            pass
+
+        elif backend == "postgres":
+            pass
+
+        else:
+            # error out if backend isn't allowed
+            click.echo('Database {} is not allowed: synth --help for more info'
+                       .format(database))
+            exit(1)
+        
 if __name__ == "__main__":
-    synth()
+    cli()
