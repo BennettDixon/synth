@@ -28,3 +28,10 @@ echo 'Creating executable in /usr/local/bin...'
 sleep 1
 cp ./synth.py /usr/local/bin/synth
 chmod +x /usr/local/bin/synth
+
+# cleanup
+echo 'Cleaning up install...'
+sleep 1
+rm -rf ./build
+rm -rf ./dist
+rm -rf ./*.egg-info
