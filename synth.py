@@ -68,9 +68,12 @@ def create(name, frontend, backend, database):
                             .format(name))
     
         elif frontend == "node":
-            pass
+            shutil.copytree(copy_dir + "frontend/node/",
+                            "{}/nginx_router/frontend/node/"
+                            .format(name))
+
         elif frontend == "react":
-            pass
+            click.echo('feature not implemented . . . yet!')
 
     else:
         # error out if frontend isn't allowed
@@ -87,10 +90,10 @@ def create(name, frontend, backend, database):
                             "{}/nginx_router/backend/flask/".format(name))
 
         elif backend == "node":
-            pass
+            click.echo('feature not implemented . . . yet!')
 
         elif backend == "django":
-            pass
+            click.echo('feature not implemented . . . yet!')
 
         else:
             # error out if backend isn't allowed
@@ -103,13 +106,13 @@ def create(name, frontend, backend, database):
 
         #<--- --->#
         if database == "mysql":
-            pass
+            click.echo('feature not implemented . . . yet!')
         
         elif backend == "mongo":
-            pass
+            click.echo('feature not implemented . . . yet!')
 
         elif backend == "postgres":
-            pass
+            click.echo('feature not implemented . . . yet!')
 
         else:
             # error out if backend isn't allowed
