@@ -16,8 +16,6 @@ Inspired by how long it can take to set up the development of web apps, synth is
 
 * `python3`
 
-* `node`
-
 ## :arrow_down: Installation
 
 Clone the repository into a new directory
@@ -44,23 +42,25 @@ synth [OPTIONS]
 --frontend
 ```
 
-	Your frontend framework. Options are `static` (default), `node`, `react`. Defaults to `static`.
+Your frontend framework. Options are `static` (default), `node`, `react`. Defaults to `static`.
 
 ```
 --backend
 ```
 
-	Your backend framework. Options are `flask`, `node`, `django`.
+Your backend framework. Options are `flask`, `node`, `django`.
+
 ```
 --database
 ```
 
-	Your choice of database. Options are `mysql`, `postgres`, `mongo`.
+Your choice of database. Options are `mysql`, `postgres`, `mongo`.
 
 ```
 --cache
 ```
-	Your choice of caching tool. Options are `redis` and `memcache`.
+
+Your choice of caching tool. Options are `redis` and `memcache`.
 
 ## :books: Coding Style Tests
 
