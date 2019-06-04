@@ -125,6 +125,8 @@ class PartBuilder():
             raise PartBuilderException(
                 "{} is not a file or did not exist.".format(part_path))
         # TODO add the actual append logic
+        print('debug: adding compose portion for {} in file {}'.format(
+            part_path, config_path))
 
     def upstream_add(self, part_path=None, config_path=None):
         """
@@ -145,6 +147,8 @@ class PartBuilder():
         if self.isfile_check(part_path) is False:
             return None
         # TODO add the actual append logic
+        print('debug: adding upstream portion for {} in file {}'.format(
+            part_path, config_path))
 
     def location_add(self, part_path=None, config_path=None):
         """
@@ -165,3 +169,5 @@ class PartBuilder():
         if self.isfile_check(part_path) is False:
             return None
         # TODO add the actual append logic
+        print('debug: adding location portion for {} in file {}'.format(
+            part_path, config_path))
