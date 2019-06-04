@@ -7,8 +7,4 @@ services:
       context: ./nginx_router
     ports:
       - "8800:80"
-  # needs to be added dynamically
-  frontend:
-    build:
-      dockerfile: Dockerfile.dev
-      context: ./nginx_router/frontend/static
+  # frontend portion

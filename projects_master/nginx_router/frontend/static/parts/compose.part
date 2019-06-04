@@ -1,0 +1,5 @@
+# two spaces indent needed for formating in master file
+  frontend:
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./nginx_router/frontend/static
