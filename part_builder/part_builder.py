@@ -24,9 +24,6 @@ class PartBuilder():
     # TODO not yet implemented
     #allowed_caches = ['redis', 'memcache']
 
-    # gets populated on init of a PartBuilder object
-    allowed_master = []
-
     def __init__(self, parts_root=None, nginx_file=None, compose_file=None):
         """
             Init method for class, sets important path information
@@ -51,6 +48,7 @@ class PartBuilder():
         self.parts_root = parts_root
         self.nginx_file = nginx_file
         self.compose_file = compose_file
+        self.allowed_master = []
         self.allowed_master.extend(self.allowed_frontends)
         self.allowed_master.extend(self.allowed_backends)
         self.allowed_master.extend(self.allowed_databases)
