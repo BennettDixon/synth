@@ -18,8 +18,8 @@ class PartBuilder():
         and nginx router file
     """
 
-    @classmethod
-    def check_paths(cls, part_path, config_path, path_err="Path Error", config_err="Config Error"):
+    @staticmethod
+    def check_paths(part_path, config_path, path_err="Path Error", config_err="Config Error"):
         """
             Checks that variables passed to PartBuilder functions
             are not None and exist
@@ -35,8 +35,7 @@ class PartBuilder():
         if config_path is None:
             raise PartBuilderException(config_err)
 
-    @classmethod
-    def compose_add(cls, part_path=None, config_path=None):
+    def compose_add(self, part_path=None, config_path=None):
         """
             Adds a part to the master docker-compose file
 
@@ -47,10 +46,9 @@ class PartBuilder():
         path_err = "Path to compose service part (part_path) can't be None"
         config_err = "Path to docker-compose file (config_path) can't be None"
 
-        cls.check_paths(part_path, config_path, path_err, config_err)
+        self.check_paths(part_path, config_path, path_err, config_err)
 
-    @classmethod
-    def upstream_add(cls, part_path=None, config_path=None):
+    def upstream_add(self, part_path=None, config_path=None):
         """
             Adds an upstream to the NGINX router default.conf file
 
@@ -61,10 +59,9 @@ class PartBuilder():
         path_err = "Path to upstream part (part_path) can't be None"
         config_err = "Path to NGINX router file (config_path) can't be None"
 
-        cls.check_paths(part_path, config_path, path_err, config_err)
+        self.check_paths(part_path, config_path, path_err, config_err)
 
-    @classmethod
-    def location_add(cls, part_path=None, config_path=None):
+    def location_add(self, part_path=None, config_path=None):
         """
             Adds a location block to the server block in the NGINX router
             default.conf file
@@ -77,4 +74,4 @@ class PartBuilder():
         path_err = "Path to location part (part_path) can't be None"
         config_err = "Path to NGINX router file (config_path) can't be None"
 
-        cls.check_paths(part_path, config_path, path_err, config_err)
+        self.check_paths(part_path, config_path, path_err, config_err)
