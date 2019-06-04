@@ -1,0 +1,3 @@
+upstream frontend {
+    server frontend:80;
+}
