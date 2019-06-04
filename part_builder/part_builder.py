@@ -17,23 +17,55 @@ class PartBuilder():
         Part builder class for use with building the compose file
         and nginx router file
     """
+    allowed_frontends = ['static', 'node', 'react', 'reactjs']
+    allowed_backends = ['node', 'flask', 'django']
+    allowed_databases = ['mongo', 'postgres', 'mysql']
+    # TODO not yet implemented
+    # allowed_caches = ['redis', 'memcache']
+
+    def __init__(self, parts_root=None, nginx_root=None, compose_root=None):
+        """
+            Init method for class, sets important path information
+        """
+        # should be the path ending in /parts (parts directory)
+        self.parts_root = parts_root
+        self.nginx_root = nginx_root
+        self.compose_root = compose_root
+
+    def add_frontend(self, frontend=None):
+        """
+            adds a frontend based on a string passed
+
+            Based on:
+                frontend: string representing frontend,
+                    e.g: static
+        """
+        self.none_check(frontend, "Cannot add frontend of None")
+        frontend = frontend.lower()
+        # append neccessary content for the frontend to the compose and nginx config files
+        if frontend in self.allowed_frontends:
+            compose_add(self.parts_root +
+                        '/compose/{}.part'.format(frontend), self.compose_root)
+            upstream_add(
+                self.parts_root + '/nginx/upstream/{}.part'.format(frontend), self.nginx_root)
+            location_add(
+                self.parts_root + '/nginx/location/{}.part'.format(frontend), self.nginx_root)
+        else:
+            raise PartBuilderException(
+                "Frontend provided to PartsBuilder not in allowed frontends")
 
     @staticmethod
-    def check_paths(part_path, config_path, path_err="Path Error", config_err="Config Error"):
+    def none_check(param=None, err_msg="Path Error"):
         """
             Checks that variables passed to PartBuilder functions
             are not None and exist
 
             Based on:
-                part_path: path to check
-                config_path: path to check
-                path_err: error to output if part_path is None
-                config_err: error to output if config_path is None
+                param: variable to check
+                err_msg: error message to output
         """
-        if part_path is None:
-            raise PartBuilderException(path_err)
-        if config_path is None:
-            raise PartBuilderException(config_err)
+        if param is None:
+            raise PartBuilderException(err_msg)
 
     def compose_add(self, part_path=None, config_path=None):
         """
@@ -46,7 +78,8 @@ class PartBuilder():
         path_err = "Path to compose service part (part_path) can't be None"
         config_err = "Path to docker-compose file (config_path) can't be None"
 
-        self.check_paths(part_path, config_path, path_err, config_err)
+        self.none_check(part_path, path_err)
+        self.none_check(config_path, config_err)
 
     def upstream_add(self, part_path=None, config_path=None):
         """
@@ -59,7 +92,8 @@ class PartBuilder():
         path_err = "Path to upstream part (part_path) can't be None"
         config_err = "Path to NGINX router file (config_path) can't be None"
 
-        self.check_paths(part_path, config_path, path_err, config_err)
+        self.none_check(part_path, path_err)
+        self.none_check(config_path, config_err)
 
     def location_add(self, part_path=None, config_path=None):
         """
@@ -74,4 +108,5 @@ class PartBuilder():
         path_err = "Path to location part (part_path) can't be None"
         config_err = "Path to NGINX router file (config_path) can't be None"
 
-        self.check_paths(part_path, config_path, path_err, config_err)
+        self.none_check(part_path, path_err)
+        self.none_check(config_path, config_err)
