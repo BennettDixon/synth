@@ -14,9 +14,15 @@ app.register_blueprint(app_views)
 
 
 def page_not_found(error):
-    """ custom 404 error response page"""
+    """ custom 404 error response page
+    """
     return jsonify({'error': "Not found"}), 404
 
+@app.route('/', strict_slashes=False):
+def hello_world():
+    """ basic route to return some json
+    """
+    return jsonify(api_goes="here!")
 
 @app.teardown_appcontext
 def teardown_appcontext(exc=None):
