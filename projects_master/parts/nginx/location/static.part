@@ -1,3 +1,4 @@
-location / {
-    proxy_pass http://frontend;
-}
+    location / {
+        proxy_pass http://frontend;
+    }
+    
