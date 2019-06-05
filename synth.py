@@ -43,10 +43,13 @@ def create(name, frontend, backend, database):
         click.echo("all synth services can't be None")
         exit(1)
     
-    if not os.path.exists(name):
+    try:
         os.mkdir(name)
-    else:
-        raise FileExistsError('Directory {} exists.'.format(name))
+    except FileExistsError:
+        click.echo('Directory {} already exists.'
+                   .format(name) +
+                   " Please choose a different name.")
+        exit(1)
 
     #<---      NGINX ROUTER SECTION     --->#
     #   - handles all container routing -   #
@@ -131,10 +134,10 @@ def create(name, frontend, backend, database):
             if database == "mysql":
                 click.echo('feature not implemented . . . yet!')
         
-            elif backend == "mongo":
+            elif database == "mongo":
                 click.echo('feature not implemented . . . yet!')
 
-            elif backend == "postgres":
+            elif database == "postgres":
                 click.echo('feature not implemented . . . yet!')
 
             else:
