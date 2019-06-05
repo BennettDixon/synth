@@ -123,8 +123,18 @@ class PartBuilder():
             raise PartBuilderException(
                 "{} is not a file or did not exist.".format(part_path))
         # TODO add the actual append logic
-        print('debug: adding compose portion for {} in file {}'.format(
+        print('debug: adding compose portion for{} in file {}'.format(
             part_path, config_path))
+        # read the part file and config file text
+        with open(part_path, 'r') as part_file:
+            part_data = part_file.readlines()
+        with open(config_path, 'r') as file:
+            cur_config = file.readlines()
+        # add the part text onto the front of the config
+        cur_config.extend(part_data)
+        # write the new compose config file
+        with open(config_path, 'w') as new_config:
+            new_config.writelines(cur_config)
 
     def upstream_add(self, part_path=None, config_path=None):
         """
@@ -144,9 +154,18 @@ class PartBuilder():
         # skip if it's not present (not an error b/c database and cache are always not present)
         if self.isfile_check(part_path) is False:
             return None
-        # TODO add the actual append logic
         print('debug: adding upstream portion for {} in file {}'.format(
             part_path, config_path))
+        # read the part file and config file text
+        with open(part_path, 'r') as part_file:
+            part_data = part_file.readlines()
+        with open(config_path, 'r') as file:
+            cur_config = file.readlines()
+        # add the part text onto the front of the config
+        part_data.extend(cur_config)
+        # write the new NGINX config file
+        with open(config_path, 'w') as new_config:
+            new_config.writelines(part_data)
 
     def location_add(self, part_path=None, config_path=None):
         """
@@ -167,5 +186,19 @@ class PartBuilder():
         if self.isfile_check(part_path) is False:
             return None
         # TODO add the actual append logic
-        print('debug: adding location portion for {} in file {}'.format(
+        print('debug, trial: adding location portion for {} in file {}'.format(
             part_path, config_path))
+        # read the part data and the nginx config default data
+        with open(part_path, 'r') as part_file:
+            part_data = part_file.readlines()
+        with open(config_path, 'r') as file:
+            cur_config = file.readlines()
+        # delete the bracket at the end of the nginx config
+        del cur_config[-1]
+        # add the new content to the NGINX config at the end
+        # and readd the bracket
+        cur_config.extend(part_data)
+        cur_config.append('}')
+        # write the data to the new NGINX config file
+        with open(config_path, 'w') as new_config:
+            new_config.writelines(cur_config)
