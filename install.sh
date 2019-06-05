@@ -22,6 +22,7 @@ echo 'Installing bootstrap projects in /etc/synth...'
 sleep 1
 mkdir -p /etc/synth
 cp -R ./projects_master/ /etc/synth/projects_master
+cp -R ./projects_master/parts /etc/synth/parts
 
 # setup executable in /usr/local/bin
 echo 'Creating executable in /usr/local/bin...'

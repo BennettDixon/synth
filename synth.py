@@ -1,10 +1,20 @@
 #!/usr/bin/env python3
+""" CLI portion of synth, a docker bootstrapping tool
+    commands:
+        - create: creates a docker wireframe with your desired
+            frontend, backend, and database
+ """
+
 import click
 import os
 import shutil
+from part_builder import PartBuilder
+from part_builder import PartBuilderException
+
 
 @click.group()
 def cli():
+    """ group class to allow expandability """
     pass
 
 @cli.command()
@@ -12,7 +22,7 @@ def cli():
               default="my_project",
               help="name of your project")
 @click.option("--frontend",
-              default="static",
+              default=None,
               help="frontend to use")
 @click.option("--backend",
               default=None,
@@ -25,9 +35,13 @@ def create(name, frontend, backend, database):
     backend, and database
     """
     copy_dir = "/etc/synth/projects_master/nginx_router/"
-    allowed_front = ["static", "node", "react"]
-    allowed_back = ["node", "flask", "django"]
-    allowed_db = ["mysql", "postgres", "mongodb"]    
+    allowed_front = PartBuilder.allowed_frontends
+    allowed_back = PartBuilder.allowed_backends
+    allowed_db = PartBuilder.allowed_databases    
+
+    if not frontend and not backend and not database:
+        click.echo("all synth services can't be None")
+        exit(1)
     
     if not os.path.exists(name):
         os.mkdir(name)
@@ -58,67 +72,78 @@ def create(name, frontend, backend, database):
     shutil.copyfile("/etc/synth/projects_master/docker-compose.yml",
                     "{}/docker-compose.yml".format(name))
 
-    #<--- FRONTEND SECTION --->#
-    if frontend in allowed_front:
-
-        #<--- STATIC FRONTEND SECTION --->#
-        if frontend == "static":
-            shutil.copytree(copy_dir + "frontend/static/",
-                            "{}/nginx_router/frontend/static/"
-                            .format(name))
+    pb = PartBuilder(parts_root="/etc/synth/parts",
+                     nginx_file="{}/nginx_router/nginx_conf/default.conf"
+                     .format(name),
+                     compose_file="{}/docker-compose.yml")
     
-        elif frontend == "node":
-            shutil.copytree(copy_dir + "frontend/node/",
-                            "{}/nginx_router/frontend/node/"
-                            .format(name))
+    #<--- FRONTEND SECTION --->#
+    if frontend is not None:
+        if frontend in allowed_front:
 
-        elif frontend == "react":
-            click.echo('feature not implemented . . . yet!')
+            if frontend == "static":
+                shutil.copytree(copy_dir + "frontend/static/",
+                                "{}/nginx_router/frontend/static/"
+                                .format(name))
+                
+            elif frontend == "node":
+                shutil.copytree(copy_dir + "frontend/node/",
+                                "{}/nginx_router/frontend/node/"
+                                .format(name))
+                
+            elif frontend == "react":
+                click.echo('feature not implemented . . . yet!')
+    
+            else:
+                # error out if frontend isn't allowed
+                raise PartBuilderException("frontend {} is not allowed"
+                                           .format(frontend))
 
-    else:
-        # error out if frontend isn't allowed
-        click.echo('Frontend {} not allowed: synth --help for more info'
-                   .format(frontend))
-        exit(1)
+            # add frontend section to docker-compose file
+            pb.add_part(frontend)
 
     #<--- BACKEND SECTION --->#
-    if backend in allowed_back:
+    if backend is not None:
+        if backend in allowed_back:
 
-        #<--- FLASK BACKEND SECTION --->#
-        if backend == "flask":
-            shutil.copytree(copy_dir + "backend/flask/",
-                            "{}/nginx_router/backend/flask/".format(name))
+            if backend == "flask":
+                shutil.copytree(copy_dir + "backend/flask/",
+                                "{}/nginx_router/backend/flask/".format(name))
 
-        elif backend == "node":
-            click.echo('feature not implemented . . . yet!')
+            elif backend == "node":
+                click.echo('feature not implemented . . . yet!')
 
-        elif backend == "django":
-            click.echo('feature not implemented . . . yet!')
+            elif backend == "django":
+                click.echo('feature not implemented . . . yet!')
+                    
+            else:
+                # error out if backend isn't allowed
+                raise PartBuilderException("backend {} is not allowed"
+                                           .format(backend))
 
-        else:
-            # error out if backend isn't allowed
-            click.echo('Backend {} is not allowed: synth --help for more info'
-                       .format(backend))
-            exit(1)
+            # add backend section to docker-compose file
+            pb.add_part(backend)
 
     #<--- DATABASE SECTION --->#
-    if database in allowed_db:
+    if database is not None:
+        if database in allowed_db:
 
-        #<--- --->#
-        if database == "mysql":
-            click.echo('feature not implemented . . . yet!')
+            if database == "mysql":
+                click.echo('feature not implemented . . . yet!')
         
-        elif backend == "mongo":
-            click.echo('feature not implemented . . . yet!')
+            elif backend == "mongo":
+                click.echo('feature not implemented . . . yet!')
 
-        elif backend == "postgres":
-            click.echo('feature not implemented . . . yet!')
+            elif backend == "postgres":
+                click.echo('feature not implemented . . . yet!')
 
-        else:
-            # error out if backend isn't allowed
-            click.echo('Database {} is not allowed: synth --help for more info'
-                       .format(database))
-            exit(1)
-        
+            else:
+                # error out if backend isn't allowed
+                raise PartBuilderException("database {} is not allowed"
+                                           .format(database))
+
+            # add database section to docker-compose file
+            pb.add_part(database)
+
 if __name__ == "__main__":
     cli()
