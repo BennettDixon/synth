@@ -17,6 +17,7 @@ def cli():
     """ group class to allow expandability """
     pass
 
+
 @cli.command()
 @click.option("--name",
               default="my_project",
@@ -37,12 +38,12 @@ def create(name, frontend, backend, database):
     copy_dir = "/etc/synth/projects_master/nginx_router/"
     allowed_front = PartBuilder.allowed_frontends
     allowed_back = PartBuilder.allowed_backends
-    allowed_db = PartBuilder.allowed_databases    
+    allowed_db = PartBuilder.allowed_databases
 
     if not frontend and not backend and not database:
         click.echo("all synth services can't be None")
         exit(1)
-    
+
     try:
         os.mkdir(name)
     except FileExistsError:
@@ -78,8 +79,9 @@ def create(name, frontend, backend, database):
     pb = PartBuilder(parts_root="/etc/synth/parts",
                      nginx_file="{}/nginx_router/nginx_conf/default.conf"
                      .format(name),
-                     compose_file="{}/docker-compose.yml")
-    
+                     compose_file="{}/docker-compose.yml"
+                     .format(name))
+
     #<--- FRONTEND SECTION --->#
     if frontend is not None:
         if frontend in allowed_front:
@@ -88,15 +90,15 @@ def create(name, frontend, backend, database):
                 shutil.copytree(copy_dir + "frontend/static/",
                                 "{}/nginx_router/frontend/static/"
                                 .format(name))
-                
+
             elif frontend == "node":
                 shutil.copytree(copy_dir + "frontend/node/",
                                 "{}/nginx_router/frontend/node/"
                                 .format(name))
-                
+
             elif frontend == "react":
                 click.echo('feature not implemented . . . yet!')
-    
+
             else:
                 # error out if frontend isn't allowed
                 raise PartBuilderException("frontend {} is not allowed"
@@ -118,7 +120,7 @@ def create(name, frontend, backend, database):
 
             elif backend == "django":
                 click.echo('feature not implemented . . . yet!')
-                    
+
             else:
                 # error out if backend isn't allowed
                 raise PartBuilderException("backend {} is not allowed"
@@ -133,7 +135,7 @@ def create(name, frontend, backend, database):
 
             if database == "mysql":
                 click.echo('feature not implemented . . . yet!')
-        
+
             elif database == "mongo":
                 click.echo('feature not implemented . . . yet!')
 
@@ -147,6 +149,7 @@ def create(name, frontend, backend, database):
 
             # add database section to docker-compose file
             pb.add_part(database)
+
 
 if __name__ == "__main__":
     cli()
