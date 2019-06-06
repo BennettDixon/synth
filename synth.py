@@ -122,7 +122,7 @@ def create(name, frontend, backend, database, cache):
                                 "{}/nginx_router/frontend/static/"
                                 .format(name))
 
-            elif frontend == "node":
+            elif frontend == "node_front":
                 shutil.copytree(copy_dir + "frontend/node/",
                                 "{}/nginx_router/frontend/node/"
                                 .format(name))
@@ -146,7 +146,7 @@ def create(name, frontend, backend, database, cache):
                 shutil.copytree(copy_dir + "backend/flask/",
                                 "{}/nginx_router/backend/flask/".format(name))
 
-            elif backend == "node":
+            elif backend == "node_back":
                 click.echo('feature not implemented . . . yet!')
 
             elif backend == "django":
