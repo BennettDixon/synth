@@ -31,16 +31,16 @@ def cli():
 @click.option("--database",
               default=None,
               help="database to use")
-def create(name, frontend, backend, database):
+@click.option("--cache",
+              default=None,
+              help="caching service to use")
+def create(name, frontend, backend, database, cache):
     """ creates a synth wireframe with your desired frontend,
     backend, and database
     """
     copy_dir = "/etc/synth/projects_master/nginx_router/"
-    allowed_front = PartBuilder.allowed_frontends
-    allowed_back = PartBuilder.allowed_backends
-    allowed_db = PartBuilder.allowed_databases
 
-    if not frontend and not backend and not database:
+    if not frontend and not backend and not database and not cache:
         click.echo("all synth services can't be None")
         exit(1)
 
@@ -82,9 +82,31 @@ def create(name, frontend, backend, database):
                      compose_file="{}/docker-compose.yml"
                      .format(name))
 
+    #<--- DATABASE SECTION --->#
+    if database is not None:
+        try:
+            # add database section to docker-compose file
+            pb.add_part(database)
+
+        except PartBuilderException as pbe:
+            # error out if the database isn't allowed
+            click.echo(pbe)
+            exit(1)
+
+    #<--- CACHING SECTION --->#
+    if cache is not None:
+        try:
+            # add cache section to docker-compose file
+            pb.add_part(cache)
+
+        except PartBuilderException as pbe:
+            # error out if caching service isn't allowed
+            click.echo(pbe)
+            exit(1)
+
     #<--- FRONTEND SECTION --->#
     if frontend is not None:
-        if frontend in allowed_front:
+        try:
 
             if frontend == "static":
                 shutil.copytree(copy_dir + "frontend/static/",
@@ -99,17 +121,18 @@ def create(name, frontend, backend, database):
             elif frontend == "react":
                 click.echo('feature not implemented . . . yet!')
 
-            else:
-                # error out if frontend isn't allowed
-                raise PartBuilderException("frontend {} is not allowed"
-                                           .format(frontend))
-
             # add frontend section to docker-compose file
+            # raises
             pb.add_part(frontend)
+
+        except PartBuilderException as pbe:
+            # error out if frontend isn't allowed
+            click.echo(pbe)
+            exit(1)
 
     #<--- BACKEND SECTION --->#
     if backend is not None:
-        if backend in allowed_back:
+        try:
 
             if backend == "flask":
                 shutil.copytree(copy_dir + "backend/flask/",
@@ -121,34 +144,15 @@ def create(name, frontend, backend, database):
             elif backend == "django":
                 click.echo('feature not implemented . . . yet!')
 
-            else:
-                # error out if backend isn't allowed
-                raise PartBuilderException("backend {} is not allowed"
-                                           .format(backend))
-
             # add backend section to docker-compose file
-            pb.add_part(backend)
+            # raises exception if backend not allowed
+            pb.add_part(backend, database, cache)
 
-    #<--- DATABASE SECTION --->#
-    if database is not None:
-        if database in allowed_db:
-
-            if database == "mysql":
-                click.echo('feature not implemented . . . yet!')
-
-            elif database == "mongo":
-                click.echo('feature not implemented . . . yet!')
-
-            elif database == "postgres":
-                click.echo('feature not implemented . . . yet!')
-
-            else:
+        except PartBuilderException as pbe:
                 # error out if backend isn't allowed
-                raise PartBuilderException("database {} is not allowed"
-                                           .format(database))
+                click.echo(pbe)
+                exit(1)
 
-            # add database section to docker-compose file
-            pb.add_part(database)
 
 
 if __name__ == "__main__":
