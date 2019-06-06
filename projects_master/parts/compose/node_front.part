@@ -1,0 +1,4 @@
+  frontend:
+    build:
+      dockerfile: Dockerfile.dev
+      context ./nginx_router/frontend/node
