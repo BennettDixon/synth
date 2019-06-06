@@ -18,8 +18,8 @@ class PartBuilder():
         Part builder class for use with building the compose file
         and nginx router file
     """
-    allowed_frontends = ['static', 'node', 'react', 'reactjs']
-    allowed_backends = ['node', 'flask', 'django']
+    allowed_frontends = ['static', 'node_front', 'react', 'reactjs']
+    allowed_backends = ['node_back', 'flask', 'django']
     allowed_databases = ['mongo', 'postgres', 'mysql']
     allowed_caches = ['redis', 'memcache']
 
@@ -80,7 +80,7 @@ class PartBuilder():
             return False
         return os.path.isfile(path)
 
-    def add_part(self, part=None):
+    def add_part(self, part=None, database=None, cache=None):
         """
             adds a part to compose and nginx files based on a string passed
 
@@ -93,15 +93,65 @@ class PartBuilder():
         part = part.lower()
         # append neccessary content for the part to the compose and nginx config files
         if part in self.allowed_master:
-            self.compose_add(self.parts_root +
-                             '/compose/{}.part'.format(part), self.compose_file)
+            # build the NGINX router default.conf
             self.upstream_add(self.parts_root +
                               '/nginx/upstream/{}.part'.format(part), self.nginx_file)
             self.location_add(self.parts_root +
                               '/nginx/location/{}.part'.format(part), self.nginx_file)
+
+            # build the docker-compose file
+            self.compose_add(self.parts_root +
+                             '/compose/{}.part'.format(part), self.compose_file)
+            if part in self.allowed_backends and (database not None or cache not None):
+                self.backend_compose_update(database, cache)
+
         else:
             raise PartBuilderException(
                 "part provided to PartBuilder ({}) is not in allowed_master".format(part))
+
+    def backend_compose_update(self, database, cache):
+        """
+            updates the compose file after adding a part if its a backend by adding
+            neccessary environmental variables and depends_on sections
+        """
+        print(
+            'debug: PartBuilder adding depends_on and env content for compose section')
+        if (database not in self.allowed_databases and cache not in self.allowed_caches):
+            raise PartBuilderException(
+                "backend_compose_update failed because database or cache not in allowed services"
+            )
+        self.compose_add(
+            self.parts_root + '/compose/depends/base.part',
+            self.compose_file)
+        if database in self.allowed_databases:
+            self.compose_add(
+                self.parts_root +
+                '/compose/depends/{}.part'.format(database),
+                self.compose_file
+            )
+        if cache in self.allowed_caches:
+            self.compose_add(
+                self.parts_root +
+                '/compose/depends/{}.part'.format(cache),
+                self.compose_file
+            )
+        # add environment variables for cache and database
+        self.compose_add(
+            self.parts_root + '/compose/env/base.part',
+            self.compose_file
+        )
+        if database in self.allowed_databases:
+            self.compose_add(
+                self.parts_root +
+                '/compose/env/{}.part'.format(database),
+                self.compose_file
+            )
+        if cache in self.allowed_caches:
+            self.compose_add(
+                self.parts_root +
+                '/compose/env/{}.part'.format(cache),
+                self.compose_file
+            )
 
     def compose_add(self, part_path=None, config_path=None):
         """
