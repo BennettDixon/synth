@@ -18,11 +18,13 @@ def page_not_found(error):
     """
     return jsonify({'error': "Not found"}), 404
 
-@app.route('/', strict_slashes=False):
+
+@app.route('/', strict_slashes=False)
 def hello_world():
     """ basic route to return some json
     """
     return jsonify(api_goes="here!")
+
 
 @app.teardown_appcontext
 def teardown_appcontext(exc=None):
