@@ -7,4 +7,3 @@ services:
       context: ./nginx_router
     ports:
       - "8800:80"
-  # frontend portion
