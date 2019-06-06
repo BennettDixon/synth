@@ -102,7 +102,7 @@ class PartBuilder():
             # build the docker-compose file
             self.compose_add(self.parts_root +
                              '/compose/{}.part'.format(part), self.compose_file)
-            if part in self.allowed_backends and (database not None or cache not None):
+            if part in self.allowed_backends and (database is not None or cache is not None):
                 self.backend_compose_update(database, cache)
 
         else:
