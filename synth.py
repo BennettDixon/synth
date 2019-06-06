@@ -44,6 +44,14 @@ def create(name, frontend, backend, database, cache):
         click.echo("all synth services can't be None")
         exit(1)
 
+    # checks for node, which can be used for both FE and BE
+    if frontend == "node":
+        frontend == "node_front"
+
+    if backend == "node":
+        backend == "node_back"
+
+    # make the directory for the project if it doesn't exist
     try:
         os.mkdir(name)
     except FileExistsError:
