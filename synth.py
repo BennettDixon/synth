@@ -31,7 +31,10 @@ def cli():
 @click.option("--database",
               default=None,
               help="database to use")
-def create(name, frontend, backend, database):
+@click.option("--cache",
+              default=None,
+              help="caching service to use")
+def create(name, frontend, backend, database, cache):
     """ creates a synth wireframe with your desired frontend,
     backend, and database
     """
@@ -39,8 +42,9 @@ def create(name, frontend, backend, database):
     allowed_front = PartBuilder.allowed_frontends
     allowed_back = PartBuilder.allowed_backends
     allowed_db = PartBuilder.allowed_databases
+    allowed_cache = PartBuilder.allowed_caches
 
-    if not frontend and not backend and not database:
+    if not frontend and not backend and not database and not cache:
         click.echo("all synth services can't be None")
         exit(1)
 
@@ -127,29 +131,48 @@ def create(name, frontend, backend, database):
                                            .format(backend))
 
             # add backend section to docker-compose file
-            pb.add_part(backend)
+            pb.add_part(backend, database, cache)
 
     #<--- DATABASE SECTION --->#
     if database is not None:
         if database in allowed_db:
 
             if database == "mysql":
-                click.echo('feature not implemented . . . yet!')
+                click.echo('database feature not implemented . . . yet!')
 
             elif database == "mongo":
-                click.echo('feature not implemented . . . yet!')
+                click.echo('database feature not implemented . . . yet!')
 
             elif database == "postgres":
-                click.echo('feature not implemented . . . yet!')
+                click.echo('database feature not implemented . . . yet!')
 
             else:
-                # error out if backend isn't allowed
+                # error out if database isn't allowed
                 raise PartBuilderException("database {} is not allowed"
                                            .format(database))
 
             # add database section to docker-compose file
             pb.add_part(database)
 
+
+
+    #<--- CACHING SECTION --->#
+    if cache is not None:
+        if cache in allowed_cache:
+
+            if cache == "redis":
+                click.echo('caching feature not implemented . . . yet!')
+
+            if cache == "memcache":
+                click.echo('caching feature not implemented . . . yet!')
+
+            else:
+                # error out if caching service isn't allowed
+                raise PartBuilderException("caching service {} is not allowed"
+                                           .format(cache))
+
+            # add cache section to docker-compose file
+            pb.add_part(cache)
 
 if __name__ == "__main__":
     cli()
