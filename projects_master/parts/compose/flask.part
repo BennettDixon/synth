@@ -3,3 +3,5 @@
     build:
       context: ./nginx_router/backend/flask
       dockerfile: Dockerfile.dev
+    volumes:
+      - ./nginx_router/backend/flask:/app

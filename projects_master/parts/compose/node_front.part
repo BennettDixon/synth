@@ -3,3 +3,7 @@
     build:
       dockerfile: Dockerfile.dev
       context: ./nginx_router/frontend/node
+    # /app is the working dir of the container
+    volumes:
+      - /app/node_modules
+      - ./nginx_router/frontend/node:/app
