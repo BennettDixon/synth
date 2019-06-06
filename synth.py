@@ -161,6 +161,10 @@ def create(name, frontend, backend, database, cache):
                 exit(1)
 
 
+    click.echo("\nsynthesized project directory {}".format(name))
+    click.echo("run:\n\n\tcd {}; docker-compose up --build\n"
+               .format(name))
+    click.echo("to start your containers!\n")
 
 if __name__ == "__main__":
     cli()
