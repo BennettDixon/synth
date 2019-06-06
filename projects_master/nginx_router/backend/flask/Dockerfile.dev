@@ -12,5 +12,5 @@ EXPOSE 5005
 # move backend directory into root of app directory
 # OK b/c backend image contains no frontend code
 COPY ./ ./
-# DEFAULT COMMAND, OVERWRITTEN BY COMPOSE
-CMD ["python3", "-m", "api.v1.app"]
+
+CMD ["python3", "-u", "-m", "api.v1.app"]
