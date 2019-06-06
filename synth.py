@@ -84,6 +84,7 @@ def create(name, frontend, backend, database, cache):
     shutil.copyfile("/etc/synth/projects_master/docker-compose.yml",
                     "{}/docker-compose.yml".format(name))
 
+    # build PartBuilder instance
     pb = PartBuilder(parts_root="/etc/synth/parts",
                      nginx_file="{}/nginx_router/nginx_conf/default.conf"
                      .format(name),
@@ -130,7 +131,6 @@ def create(name, frontend, backend, database, cache):
                 click.echo('feature not implemented . . . yet!')
 
             # add frontend section to docker-compose file
-            # raises
             pb.add_part(frontend)
 
         except PartBuilderException as pbe:
@@ -153,7 +153,6 @@ def create(name, frontend, backend, database, cache):
                 click.echo('feature not implemented . . . yet!')
 
             # add backend section to docker-compose file
-            # raises exception if backend not allowed
             pb.add_part(backend, database, cache)
 
         except PartBuilderException as pbe:
