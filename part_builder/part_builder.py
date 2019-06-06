@@ -21,8 +21,7 @@ class PartBuilder():
     allowed_frontends = ['static', 'node', 'react', 'reactjs']
     allowed_backends = ['node', 'flask', 'django']
     allowed_databases = ['mongo', 'postgres', 'mysql']
-    # TODO not yet implemented
-    #allowed_caches = ['redis', 'memcache']
+    allowed_caches = ['redis', 'memcache']
 
     def __init__(self, parts_root=None, nginx_file=None, compose_file=None):
         """
@@ -52,8 +51,7 @@ class PartBuilder():
         self.allowed_master.extend(self.allowed_frontends)
         self.allowed_master.extend(self.allowed_backends)
         self.allowed_master.extend(self.allowed_databases)
-        # TODO caches not yet implemented
-        # self.allowed_master.extend(self.allowed_caches)
+        self.allowed_master.extend(self.allowed_caches)
 
     @staticmethod
     def str_check(param=None, err_msg="Path Error"):
