@@ -1,16 +1,13 @@
-# Pull base image
-FROM node:6.17-alpine
+# DEVELOPMENT DOCKER FILE
 
-# Set working container path for commands
-WORKDIR /usr/my_node_app
+# for use when developing application
+# this NGINX container is used to serve static content
 
-# Copy files over
-COPY ./package.json ./
+FROM nginx
 
-# SET UP DEPENDENCIES
-RUN npm install
+# copy the nginx server configuration
+COPY ./nginx_conf/default.conf /etc/nginx/conf.d/default.conf
+COPY ./nginx_conf/nginx.conf /etc/nginx/nginx.conf
 
-COPY ./ ./
-
-# Default command
-CMD ["npm", "run", "start"]
+COPY ./*.html /usr/share/nginx/html
+COPY ./styles /usr/share/nginx/html/styles

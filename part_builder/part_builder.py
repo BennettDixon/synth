@@ -18,8 +18,8 @@ class PartBuilder():
         Part builder class for use with building the compose file
         and nginx router file
     """
-    allowed_frontends = ['static', 'node_front', 'react', 'reactjs']
-    allowed_backends = ['node_back', 'flask', 'django']
+    allowed_frontends = ['static', 'dynamic', 'react', 'reactjs']
+    allowed_backends = ['node', 'flask', 'django']
     allowed_databases = ['mongo', 'postgres', 'mysql']
     allowed_caches = ['redis', 'memcache']
 

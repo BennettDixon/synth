@@ -12,6 +12,7 @@ from part_builder import PartBuilderException
 import shutil
 import traceback
 
+
 @click.group()
 def cli():
     """ synth is a tool to create and deploy wireframed docker
@@ -130,9 +131,9 @@ def create(name, frontend, backend, database, cache):
         except (PartBuilderException, FileNotFoundError) as desc_e:
             # error out if caching service isn't allowed
             if type(desc_e) is FileNotFoundError:
-                click.echo("FileNotFoundError: " + fnf)
+                click.echo("FileNotFoundError: {}".format(desc_e))
             if type(desc_e) is PartBuilderException:
-                click.echo("PartBuilderException: " + pbe)
+                click.echo("PartBuilderException: {}".format(desc_e))
             cleanup(name)
 
         except Exception as e:
@@ -154,8 +155,8 @@ def create(name, frontend, backend, database, cache):
 
         except PartBuilderException as pbe:
                 # error out if backend isn't allowed
-                click.echo(pbe)
-                cleanup(name)
+            click.echo(pbe)
+            cleanup(name)
 
     click.echo("\nsynthesized project directory {}".format(name))
     click.echo("run:\n\n\tcd {}; docker-compose up --build\n"
@@ -171,10 +172,12 @@ def deploy(pods):
     """ deploy your synth project on the current server """
     click.echo(pods)
 
+
 def cleanup(name):
     """ cleanup operation to remove directory of a failed create """
     shutil.rmtree(name)
     exit(1)
+
 
 if __name__ == "__main__":
     cli()
