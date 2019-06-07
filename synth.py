@@ -100,7 +100,7 @@ def create(name, frontend, backend, database, cache):
         except PartBuilderException as pbe:
             # error out if the database isn't allowed
             click.echo(pbe)
-            exit(1)
+            cleanup(name)
 
     #<--- CACHING SECTION --->#
     if cache is not None:
@@ -111,7 +111,7 @@ def create(name, frontend, backend, database, cache):
         except PartBuilderException as pbe:
             # error out if caching service isn't allowed
             click.echo(pbe)
-            exit(1)
+            cleanup(name)
 
     #<--- FRONTEND SECTION --->#
     if frontend is not None:
@@ -136,7 +136,7 @@ def create(name, frontend, backend, database, cache):
         except PartBuilderException as pbe:
             # error out if frontend isn't allowed
             click.echo(pbe)
-            exit(1)
+            cleanup(name)
 
     #<--- BACKEND SECTION --->#
     if backend is not None:
@@ -158,7 +158,7 @@ def create(name, frontend, backend, database, cache):
         except PartBuilderException as pbe:
                 # error out if backend isn't allowed
                 click.echo(pbe)
-                exit(1)
+                cleanup(name)
 
     click.echo("\nsynthesized project directory {}".format(name))
     click.echo("run:\n\n\tcd {}; docker-compose up --build\n"
@@ -168,12 +168,16 @@ def create(name, frontend, backend, database, cache):
 
 @click.command()
 @click.option("--pods",
-              default=1
+              default=1,
               help="number of frontend pods to use")
 def deploy(pods):
     """ deploy your synth project on the current server """
     click.echo(pods)
 
+def cleanup(name):
+    """ cleanup operation to remove directory of a failed create """
+    shutil.rmtree(name)
+    exit(1)
 
 if __name__ == "__main__":
     cli()
