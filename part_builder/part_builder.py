@@ -23,7 +23,7 @@ class PartBuilder():
     allowed_databases = ['mongo', 'postgres', 'mysql']
     allowed_caches = ['redis', 'memcache']
 
-    def __init__(self, parts_root=None, nginx_file=None, compose_file=None):
+    def __init__(self, parts_root=None, nginx_file=None, compose_file=None, front_enabled=False, back_enabled=False):
         """
             Init method for class, sets important path information
         """
@@ -52,6 +52,8 @@ class PartBuilder():
         self.allowed_master.extend(self.allowed_backends)
         self.allowed_master.extend(self.allowed_databases)
         self.allowed_master.extend(self.allowed_caches)
+        self.compose_router_update(
+            front_enabled=front_enabled, back_enabled=back_enabled)
 
     @staticmethod
     def str_check(param=None, err_msg="Path Error"):
@@ -108,6 +110,27 @@ class PartBuilder():
         else:
             raise PartBuilderException(
                 "part provided to PartBuilder ({}) is not in allowed_master".format(part))
+
+    def compose_router_update(self, front_enabled=False, back_enabled=False):
+        """
+        must be run before all other things dealing with compose building
+        due to relating with the router
+        """
+        if not front_enabled and not back_enabled:
+            return
+        self.compose_add(
+            self.parts_root + '/compose/depends/base.part',
+            self.compose_file)
+        if front_enabled:
+            self.compose_add(
+                self.parts_root + '/compose/depends/frontend.part',
+                self.compose_file
+            )
+        if back_enabled:
+            self.compose_add(
+                self.parts_root + '/compose/depends/backend.part',
+                self.compose_file
+            )
 
     def backend_compose_update(self, database, cache):
         """
