@@ -160,11 +160,20 @@ def create(name, frontend, backend, database, cache):
                 click.echo(pbe)
                 exit(1)
 
-
     click.echo("\nsynthesized project directory {}".format(name))
     click.echo("run:\n\n\tcd {}; docker-compose up --build\n"
                .format(name))
-    click.echo("to start your containers!\n")
+    click.echo("to start your development containers!\n")
+
+
+@click.command()
+@click.option("--pods",
+              default=1
+              help="number of frontend pods to use")
+def deploy(pods):
+    """ deploy your synth project on the current server """
+    click.echo(pods)
+
 
 if __name__ == "__main__":
     cli()
