@@ -7,14 +7,16 @@
 
 import click
 import os
-import shutil
 from part_builder import PartBuilder
 from part_builder import PartBuilderException
-
+import shutil
+import traceback
 
 @click.group()
 def cli():
-    """ group class to allow expandability """
+    """ synth is a tool to create and deploy wireframed docker
+    images and compose files easily. It was created by Bennett
+    Dixon and Jack Gindi."""
     pass
 
 
@@ -43,13 +45,6 @@ def create(name, frontend, backend, database, cache):
     if not frontend and not backend and not database and not cache:
         click.echo("all synth services can't be None")
         exit(1)
-
-    # checks for node, which can be used for both FE and BE
-    if frontend == "node":
-        frontend = "node_front"
-
-    if backend == "node":
-        backend = "node_back"
 
     # make the directory for the project if it doesn't exist
     try:
@@ -108,9 +103,16 @@ def create(name, frontend, backend, database, cache):
             # add cache section to docker-compose file
             pb.add_part(cache)
 
-        except PartBuilderException as pbe:
+        except (PartBuilderException, FileNotFoundError) as desc_e:
             # error out if caching service isn't allowed
-            click.echo(pbe)
+            if type(desc_e) is FileNotFoundError:
+                click.echo("FileNotFoundError: " + fnf)
+            if type(desc_e) is PartBuilderException:
+                click.echo("PartBuilderException: " + pbe)
+            cleanup(name)
+
+        except Exception as e:
+            traceback.print_tb(e.__traceback__)
             cleanup(name)
 
     #<--- FRONTEND SECTION --->#
@@ -125,9 +127,17 @@ def create(name, frontend, backend, database, cache):
             # add frontend section to docker-compose file
             pb.add_part(frontend)
 
-        except PartBuilderException as pbe:
+        except (PartBuilderException, FileNotFoundError) as desc_e:
+            # error out if caching service isn't allowed
+            if type(desc_e) is FileNotFoundError:
+                click.echo("FileNotFoundError: " + fnf)
+            if type(desc_e) is PartBuilderException:
+                click.echo("PartBuilderException: " + pbe)
+            cleanup(name)
+
+        except Exception as e:
             # error out if frontend isn't allowed
-            click.echo(pbe)
+            click.echo("{}: ".format(e.__class__.__name__) + e)
             cleanup(name)
 
     #<--- BACKEND SECTION --->#

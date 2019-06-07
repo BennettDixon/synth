@@ -42,7 +42,7 @@ synth [OPTIONS]
 --frontend
 ```
 
-Your frontend framework. Options are `static` (default), `node`, `react`. Defaults to `static`.
+Your frontend framework. Options are `static`, `dynamic`, `react`.
 
 ```
 --backend
