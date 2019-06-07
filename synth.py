@@ -116,19 +116,11 @@ def create(name, frontend, backend, database, cache):
     #<--- FRONTEND SECTION --->#
     if frontend is not None:
         try:
-
-            if frontend == "static":
-                shutil.copytree(copy_dir + "frontend/static/",
-                                "{}/nginx_router/frontend/static/"
-                                .format(name))
-
-            elif frontend == "node_front":
-                shutil.copytree(copy_dir + "frontend/node/",
-                                "{}/nginx_router/frontend/node/"
-                                .format(name))
-
-            elif frontend == "react":
-                click.echo('feature not implemented . . . yet!')
+            # copy directory tree into project directory
+            shutil.copytree(copy_dir + "/frontend/{}"
+                            .format(frontend),
+                            "{}/projects_master/nginx_router/frontend"
+                            .format(name))
 
             # add frontend section to docker-compose file
             pb.add_part(frontend)
@@ -141,16 +133,11 @@ def create(name, frontend, backend, database, cache):
     #<--- BACKEND SECTION --->#
     if backend is not None:
         try:
-
-            if backend == "flask":
-                shutil.copytree(copy_dir + "backend/flask/",
-                                "{}/nginx_router/backend/flask/".format(name))
-
-            elif backend == "node_back":
-                click.echo('feature not implemented . . . yet!')
-
-            elif backend == "django":
-                click.echo('feature not implemented . . . yet!')
+            # copy directory tree into project
+            shutil.copytree(copy_dir + "/backend/{}"
+                            .format(backend),
+                            "{}/projects_master/nginx_router/backend"
+                            .format(name))
 
             # add backend section to docker-compose file
             pb.add_part(backend, database, cache)
@@ -166,7 +153,7 @@ def create(name, frontend, backend, database, cache):
     click.echo("to start your development containers!\n")
 
 
-@click.command()
+@cli.command()
 @click.option("--pods",
               default=1,
               help="number of frontend pods to use")
