@@ -3,3 +3,5 @@
     build:
       dockerfile: Dockerfile.dev
       context: ./nginx_router/frontend
+    volumes:
+      - ./nginx_router/frontend:/usr/share/nginx/html
