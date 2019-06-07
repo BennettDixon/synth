@@ -120,9 +120,9 @@ def create(name, frontend, backend, database, cache):
     if frontend is not None:
         try:
             # copy directory tree into project directory
-            shutil.copytree(copy_dir + "/frontend/{}"
+            shutil.copytree(copy_dir + "frontend/{}"
                             .format(frontend),
-                            "{}/projects_master/nginx_router/frontend"
+                            "{}/nginx_router/frontend/"
                             .format(name))
 
             # add frontend section to docker-compose file
@@ -145,9 +145,9 @@ def create(name, frontend, backend, database, cache):
     if backend is not None:
         try:
             # copy directory tree into project
-            shutil.copytree(copy_dir + "/backend/{}"
+            shutil.copytree(copy_dir + "backend/{}"
                             .format(backend),
-                            "{}/projects_master/nginx_router/backend"
+                            "{}/nginx_router/backend/"
                             .format(name))
 
             # add backend section to docker-compose file
