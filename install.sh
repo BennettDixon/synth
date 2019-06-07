@@ -7,10 +7,11 @@ echo 'Python 3.4+ is required to run synth!'
 echo 'Installing Python Dependencies...'
 sleep 1
 # python3 dependencies
-pip3 install click
+pip3 -q install click
 # build our part_builder dependency, removing any old versions first
-pip3 uninstall -y part_builder
-python3 setup.py install
+echo 'Installing part_builder...'
+pip3 -q uninstall -y part_builder
+python3 setup.py --quiet install
 
 # setup content in /etc
 if [ -d  "/etc/synth" ]; then
