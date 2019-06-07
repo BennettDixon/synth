@@ -16,7 +16,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Thanks for using Synth!
+          Thanks for using Synth!!!
         </a>
       </header>
     </div>
