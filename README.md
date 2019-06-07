@@ -42,25 +42,25 @@ synth [OPTIONS]
 --frontend
 ```
 
-Your frontend framework. Options are `static`, `dynamic`, `react`.
+Your frontend framework. Currently supported options are `static`, `dynamic`, `react`.
 
 ```
 --backend
 ```
 
-Your backend framework. Options are `flask`, `node`, `django`.
+Your backend framework. Currently supported options are `flask`, `node`, `django`.
 
 ```
 --database
 ```
 
-Your choice of database. Options are `mysql`, `postgres`, `mongo`.
+Your choice of database. Currently supported options are `mysql`, `postgres`, `mongo`.
 
 ```
 --cache
 ```
 
-Your choice of caching tool. Options are `redis` and `memcache`.
+Your choice of caching tool. Currently supported options are `redis` and `memcache`.
 
 ## :books: Coding Style Tests
 
