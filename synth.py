@@ -37,7 +37,10 @@ def cli():
 @click.option("--cache",
               default=None,
               help="caching service to use")
-def create(name, frontend, backend, database, cache):
+@click.option("--cicd"
+              default=None,
+              help="ci/cd service to use")
+def create(name, frontend, backend, database, cache, cicd):
     """ creates a synth wireframe with your desired frontend,
     backend, and database
     """
@@ -104,18 +107,12 @@ def create(name, frontend, backend, database, cache):
             # add cache section to docker-compose file
             pb.add_part(cache)
 
-        except (PartBuilderException, FileNotFoundError) as desc_e:
-            # error out if caching service isn't allowed
-            if type(desc_e) is FileNotFoundError:
-                click.echo("FileNotFoundError: " + fnf)
-            if type(desc_e) is PartBuilderException:
-                click.echo("PartBuilderException: " + pbe)
+        except PartBuilderException as pbe:
+            # error out if cache isn't allowed
+            click.echo(pbe)
             cleanup(name)
 
-        except Exception as e:
-            traceback.print_tb(e.__traceback__)
-            cleanup(name)
-
+    
     #<--- FRONTEND SECTION --->#
     if frontend is not None:
         try:
@@ -126,7 +123,7 @@ def create(name, frontend, backend, database, cache):
                             .format(name))
 
             # add frontend section to docker-compose file
-            pb.add_part(frontend)
+            pb.add_part(frontend, database, cache)
 
         except (PartBuilderException, FileNotFoundError) as desc_e:
             # error out if caching service isn't allowed
@@ -138,7 +135,7 @@ def create(name, frontend, backend, database, cache):
 
         except Exception as e:
             # error out if frontend isn't allowed
-            click.echo("{}: ".format(e.__class__.__name__) + e)
+            traceback.print_tb(e.__traceback__)
             cleanup(name)
 
     #<--- BACKEND SECTION --->#
@@ -153,16 +150,34 @@ def create(name, frontend, backend, database, cache):
             # add backend section to docker-compose file
             pb.add_part(backend, database, cache)
 
-        except PartBuilderException as pbe:
-                # error out if backend isn't allowed
-            click.echo(pbe)
+        except (PartBuilderException, FileNotFoundError) as desc_e:
+            # error out if caching service isn't allowed
+            if type(desc_e) is FileNotFoundError:
+                click.echo("FileNotFoundError: " + fnf)
+            if type(desc_e) is PartBuilderException:
+                click.echo("PartBuilderException: " + pbe)
             cleanup(name)
 
+        except Exception as e:
+            traceback.print_tb(e.__traceback__)
+            cleanup(name)
+
+    #<--- CI/CD SECTION --->#
+    if cicd is not None:
+        try:
+            # add CI/CD section to docker-compose file
+            pb.add_part(cicd)
+
+        except PartBuilderException as e:
+            # error out if CI/CD service isn't allowed
+            click.echo("PartBuilderException: {}".format(desc_e))
+            cleanup(name)
+            
+            
     click.echo("\nsynthesized project directory {}".format(name))
     click.echo("run:\n\n\tcd {}; docker-compose up --build\n"
                .format(name))
     click.echo("to start your development containers!\n")
-
 
 @cli.command()
 @click.option("--pods",

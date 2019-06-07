@@ -27,7 +27,7 @@ python3 -m unittest discover tests
 
 .part files have a specific format:
 
-* all docker-compose parts that set environmental variables or add depends_on functionality should be added to `synth/projects_master/parts/compose/[env/depends_on]`
+* all docker-compose parts that set environmental variables or add depends_on functionality should be added to `synth/projects_master/parts/compose/[env/depends]`
 
 * all nginx .part files should be added to `synth/projects_master/parts/nginx/[name of project]`
 
