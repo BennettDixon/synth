@@ -100,7 +100,7 @@ def create(name, frontend, backend, database, cache):
         except PartBuilderException as pbe:
             # error out if the database isn't allowed
             click.echo(pbe)
-            exit(1)
+            cleanup(name)
 
     #<--- CACHING SECTION --->#
     if cache is not None:
@@ -111,24 +111,16 @@ def create(name, frontend, backend, database, cache):
         except PartBuilderException as pbe:
             # error out if caching service isn't allowed
             click.echo(pbe)
-            exit(1)
+            cleanup(name)
 
     #<--- FRONTEND SECTION --->#
     if frontend is not None:
         try:
-
-            if frontend == "static":
-                shutil.copytree(copy_dir + "frontend/static/",
-                                "{}/nginx_router/frontend/static/"
-                                .format(name))
-
-            elif frontend == "node_front":
-                shutil.copytree(copy_dir + "frontend/node/",
-                                "{}/nginx_router/frontend/node/"
-                                .format(name))
-
-            elif frontend == "react":
-                click.echo('feature not implemented . . . yet!')
+            # copy directory tree into project directory
+            shutil.copytree(copy_dir + "/frontend/{}"
+                            .format(frontend),
+                            "{}/projects_master/nginx_router/frontend"
+                            .format(name))
 
             # add frontend section to docker-compose file
             pb.add_part(frontend)
@@ -136,21 +128,16 @@ def create(name, frontend, backend, database, cache):
         except PartBuilderException as pbe:
             # error out if frontend isn't allowed
             click.echo(pbe)
-            exit(1)
+            cleanup(name)
 
     #<--- BACKEND SECTION --->#
     if backend is not None:
         try:
-
-            if backend == "flask":
-                shutil.copytree(copy_dir + "backend/flask/",
-                                "{}/nginx_router/backend/flask/".format(name))
-
-            elif backend == "node_back":
-                click.echo('feature not implemented . . . yet!')
-
-            elif backend == "django":
-                click.echo('feature not implemented . . . yet!')
+            # copy directory tree into project
+            shutil.copytree(copy_dir + "/backend/{}"
+                            .format(backend),
+                            "{}/projects_master/nginx_router/backend"
+                            .format(name))
 
             # add backend section to docker-compose file
             pb.add_part(backend, database, cache)
@@ -158,13 +145,26 @@ def create(name, frontend, backend, database, cache):
         except PartBuilderException as pbe:
                 # error out if backend isn't allowed
                 click.echo(pbe)
-                exit(1)
-
+                cleanup(name)
 
     click.echo("\nsynthesized project directory {}".format(name))
     click.echo("run:\n\n\tcd {}; docker-compose up --build\n"
                .format(name))
-    click.echo("to start your containers!\n")
+    click.echo("to start your development containers!\n")
+
+
+@cli.command()
+@click.option("--pods",
+              default=1,
+              help="number of frontend pods to use")
+def deploy(pods):
+    """ deploy your synth project on the current server """
+    click.echo(pods)
+
+def cleanup(name):
+    """ cleanup operation to remove directory of a failed create """
+    shutil.rmtree(name)
+    exit(1)
 
 if __name__ == "__main__":
     cli()
