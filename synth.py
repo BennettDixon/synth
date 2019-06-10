@@ -37,7 +37,7 @@ def cli():
 @click.option("--cache",
               default=None,
               help="caching service to use")
-@click.option("--cicd"
+@click.option("--cicd",
               default=None,
               help="ci/cd service to use")
 def create(name, frontend, backend, database, cache, cicd):
@@ -83,12 +83,21 @@ def create(name, frontend, backend, database, cache, cicd):
     shutil.copyfile("/etc/synth/projects_master/docker-compose.yml",
                     "{}/docker-compose.yml".format(name))
 
+    # gather some info for the part builder
+    front_enabled = False
+    if frontend is not None:
+        front_enabled = True
+    back_enabled = False
+    if backend is not None:
+        back_enabled = True
     # build PartBuilder instance
     pb = PartBuilder(parts_root="/etc/synth/parts",
                      nginx_file="{}/nginx_router/nginx_conf/default.conf"
                      .format(name),
                      compose_file="{}/docker-compose.yml"
-                     .format(name))
+                     .format(name),
+                     front_enabled=front_enabled,
+                     back_enabled=back_enabled)
 
     #<--- DATABASE SECTION --->#
     if database is not None:
@@ -112,7 +121,6 @@ def create(name, frontend, backend, database, cache, cicd):
             click.echo(pbe)
             cleanup(name)
 
-    
     #<--- FRONTEND SECTION --->#
     if frontend is not None:
         try:
@@ -172,12 +180,12 @@ def create(name, frontend, backend, database, cache, cicd):
             # error out if CI/CD service isn't allowed
             click.echo("PartBuilderException: {}".format(desc_e))
             cleanup(name)
-            
-            
+
     click.echo("\nsynthesized project directory {}".format(name))
     click.echo("run:\n\n\tcd {}; docker-compose up --build\n"
                .format(name))
     click.echo("to start your development containers!\n")
+
 
 @cli.command()
 @click.option("--pods",
