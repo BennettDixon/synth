@@ -4,3 +4,5 @@
     environment:
       - MYSQL_DATABASE=my_database
       - MYSQL_ROOT_PASSWORD=mysql_password
+    volumes:
+      - ./mysql_data:/var/lib/mysql/data
