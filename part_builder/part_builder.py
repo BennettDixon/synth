@@ -20,7 +20,7 @@ class PartBuilder():
     """
     allowed_frontends = ['static', 'dynamic', 'react', 'reactjs']
     allowed_backends = ['node', 'flask', 'django']
-    allowed_databases = ['mongo', 'postgres', 'mysql']
+    allowed_databases = ['mongo', 'postgres', 'mysql', 'mariadb']
     allowed_caches = ['redis', 'memcache']
 
     def __init__(self, parts_root=None, nginx_file=None, compose_file=None, front_enabled=False, back_enabled=False):
