@@ -1,0 +1,3 @@
+      - MONGO_INITDB_DATABASE=my_database
+      - MONGO_INITDB_ROOT_USERNAME=mongo_root
+      - MONGO_INITDB_ROOT_PASSWORD=mongo_password

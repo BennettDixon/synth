@@ -1,0 +1,3 @@
+
+  mongo:
+    image: "mongo:latest"
