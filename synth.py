@@ -161,9 +161,9 @@ def create(name, frontend, backend, database, cache, cicd):
         except (PartBuilderException, FileNotFoundError) as desc_e:
             # error out if caching service isn't allowed
             if type(desc_e) is FileNotFoundError:
-                click.echo("FileNotFoundError: " + fnf)
+                click.echo("FileNotFoundError: {}".format(desc_e))
             if type(desc_e) is PartBuilderException:
-                click.echo("PartBuilderException: " + pbe)
+                click.echo("PartBuilderException: {}".format(desc_e))
             cleanup(name)
 
         except Exception as e:
@@ -185,15 +185,6 @@ def create(name, frontend, backend, database, cache, cicd):
     click.echo("run:\n\n\tcd {}; docker-compose up --build\n"
                .format(name))
     click.echo("to start your development containers!\n")
-
-
-@cli.command()
-@click.option("--pods",
-              default=1,
-              help="number of frontend pods to use")
-def deploy(pods):
-    """ deploy your synth project on the current server """
-    click.echo(pods)
 
 
 def cleanup(name):
