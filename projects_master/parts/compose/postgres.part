@@ -1,3 +1,5 @@
 
   postgres:
-    image: "postgres:latest"
+    build:
+      context: ./nginx_router/database
+      dockerfile: Dockerfile.dev
