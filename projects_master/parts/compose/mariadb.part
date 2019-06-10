@@ -1,3 +1,6 @@
 
   mariadb:
     image: "mariadb:latest"
+    environment:
+      - MYSQL_DATABASE=my_database
+      - MYSQL_ROOT_PASSWORD=mysql_password
