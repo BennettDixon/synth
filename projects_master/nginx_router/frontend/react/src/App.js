@@ -12,7 +12,7 @@ function App() {
         </p>
         <a
           className="App-link"
-          href="https://reactjs.org"
+          href="https://github.com/BennettDixon/synth"
           target="_blank"
           rel="noopener noreferrer"
         >
