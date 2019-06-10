@@ -1,8 +1,8 @@
 
   mysql:
-    image: "mysql:latest"
+    image: "mysql:5.7"
     environment:
       - MYSQL_DATABASE=my_database
       - MYSQL_ROOT_PASSWORD=mysql_password
     volumes:
-      - ./mysql_data:/var/lib/mysql/data
+      - ./database/data:/var/lib/mysql
