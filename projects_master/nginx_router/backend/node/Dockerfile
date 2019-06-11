@@ -12,5 +12,5 @@ RUN npm install
 
 COPY ./ ./
 
-# Default command to run dev environment (nodemon)
-CMD ["npm", "run", "dev"]
+# Default command to run prod environment (just node)
+CMD ["npm", "run", "start"]
