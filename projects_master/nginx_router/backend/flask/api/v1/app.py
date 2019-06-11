@@ -3,14 +3,24 @@
 """
 from flask import Flask
 from flask import jsonify
+from flask_cors import CORS
 from api.v1.views import app_views
 import os
 from flask import Flask, redirect, url_for
 
 
-app = Flask(__name__)
-
+application = Flask(__name__)
+app = application
 app.register_blueprint(app_views)
+CORS(app)
+cors = CORS(app, resources={"/*": {"origins": "0.0.0.0"}})
+
+
+@app.teardown_appcontext
+def teardown_appcontext(exc=None):
+    """called on teardown of app contexts of flask
+    """
+    pass
 
 
 def page_not_found(error):
@@ -24,13 +34,6 @@ def hello_world():
     """ basic route to return some json
     """
     return jsonify(api_goes="here!")
-
-
-@app.teardown_appcontext
-def teardown_appcontext(exc=None):
-    """called on teardown of app contexts of flask
-    """
-    pass
 
 
 if __name__ == "__main__":

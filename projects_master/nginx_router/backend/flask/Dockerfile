@@ -4,12 +4,12 @@ FROM python:3.5.7-alpine3.8
 # set working directory
 WORKDIR '/app'
 
-RUN pip3 install flask requests flask_cors
-
+# run all installs in the 
+RUN pip3 install flask requests flask_cors gunicorn
 
 # move backend directory into root of app directory
 # OK b/c backend image contains no frontend code
 COPY ./ ./
-
+# expost 5005 and spawn gunicorn on 5005 with flask app
 EXPOSE 5005
-CMD ["python3", "-u", "-m", "api.v1.app"]
+CMD ["gunicorn", "-b", "0.0.0.0:5005", "api.v1.app"]
