@@ -108,14 +108,6 @@ def create(name, frontend, backend, database, cache, cicd):
             # create directory for volume mounting
             os.makedirs("{}/database/data".format(name))
 
-            # some databases need dockerfiles
-            try:
-                shutil.copytree(copy_dir + "database/{}/"
-                                .format(database),
-                                "{}/nginx_router/database/".format(name))
-            except Exception:
-                pass
-
             # add database section to docker-compose file
             pb.add_part(database)
 
