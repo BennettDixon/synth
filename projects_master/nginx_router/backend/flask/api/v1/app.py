@@ -9,8 +9,7 @@ import os
 from flask import Flask, redirect, url_for
 
 
-application = Flask(__name__)
-app = application
+app = Flask(__name__)
 app.register_blueprint(app_views)
 CORS(app)
 cors = CORS(app, resources={"/*": {"origins": "0.0.0.0"}})

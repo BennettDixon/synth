@@ -12,4 +12,4 @@ RUN pip3 install flask requests flask_cors gunicorn
 COPY ./ ./
 # expost 5005 and spawn gunicorn on 5005 with flask app
 EXPOSE 5005
-CMD ["gunicorn", "-b", "0.0.0.0:5005", "api.v1.app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:5005", "--workers", "4", "api.v1.app:app"]
