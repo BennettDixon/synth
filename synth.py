@@ -101,7 +101,13 @@ def create(name, frontend, backend, database, cache, cicd):
 
     #<--- DATABASE SECTION --->#
     if database is not None:
+        if database == "mysql":
+            click.echo("MySQL 5.7.6 has permissions issues, " +
+                       "using 5.7 instead")
         try:
+            # create directory for volume mounting
+            os.makedirs("{}/database/data".format(name))
+
             # some databases need dockerfiles
             try:
                 shutil.copytree(copy_dir + "database/{}/"

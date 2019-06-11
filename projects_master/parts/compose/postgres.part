@@ -3,3 +3,5 @@
     build:
       context: ./nginx_router/database
       dockerfile: Dockerfile.dev
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
