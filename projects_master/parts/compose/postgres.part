@@ -1,7 +1,5 @@
 
   postgres:
-    build:
-      context: ./nginx_router/database
-      dockerfile: Dockerfile.dev
+    image: "postgres:latest"
     volumes:
       - ./postgres_data:/var/lib/postgresql/data
