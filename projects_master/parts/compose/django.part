@@ -1,0 +1,7 @@
+
+  backend:
+    build:
+      context: ./nginx_router/backend
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./nginx_router/backend:/app
