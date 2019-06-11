@@ -1,6 +1,6 @@
-# DEVELOPMENT DOCKER FILE
+# PRODUCTION DOCKER FILE
 
-# for use when developing application
+# for use in creating production builds
 # this NGINX container is used to serve static content
 
 FROM nginx

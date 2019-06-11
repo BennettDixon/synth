@@ -3,7 +3,9 @@ FROM node:alpine
 WORKDIR '/app'
 # package install
 COPY ./package.json ./
-RUN npm install
+RUN npm install && \
+    echo 'Attempting to fix vulnerabilites via `npm audit fix`' && \
+    npm audit fix
 # copy rest in second step for cached packages img
 COPY . .
 CMD ["npm", "run", "start"]
