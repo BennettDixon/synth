@@ -77,6 +77,10 @@ def create(name, frontend, backend, database, cache, cicd):
                     "{}/nginx_router/Dockerfile.dev"
                     .format(name))
 
+    shutil.copyfile(copy_dir + "Dockerfile",
+                    "{}/nginx_router/Dockerfile"
+                    .format(name))
+
     #<---        COMPOSE SECTION        --->#
     #   -  base compose file for router -   #
     #   -   gets appended to as needed  -   #
