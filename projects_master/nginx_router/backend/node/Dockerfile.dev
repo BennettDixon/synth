@@ -8,7 +8,9 @@ WORKDIR /usr/my_node_app
 COPY ./package.json ./
 
 # SET UP DEPENDENCIES
-RUN npm install
+RUN npm install && \
+    echo 'Attempting to fix vulnerabilities via `npm audit fix`' && \
+    npm audit fix
 
 COPY ./ ./
 
