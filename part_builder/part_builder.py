@@ -83,7 +83,7 @@ class PartBuilder():
         return os.path.isfile(path)
 
     # ---> pipeline build section <---
-    def build_pipeline(self, name, pipeline, parts=[]):
+    def build_pipeline(self, name, pipeline, parts={}):
         """
             builds the config file for the ci / cd selected by user for the parts provided
 
@@ -102,7 +102,7 @@ class PartBuilder():
         self.build_pipeline_tests(name, pipeline, parts, parts_path)
         self.build_pipeline_deploy(name, pipeline, parts, parts_path)
 
-    def build_pipeline_pre_tests(self, name, pipeline, parts=[], parts_path):
+    def build_pipeline_pre_tests(self, name, pipeline, parts={}, parts_path):
         """
             builds the before_install section to build containers for testing
 
@@ -117,7 +117,7 @@ class PartBuilder():
             raise PartBuilderException(
                 'PartBuilder build_pipeline_pre_tests cannot build CI/CD pipeline with no parts provided')
 
-        for part in parts:
+        for part_name, part in parts.values():
             # all parts passed by default, some None
             if part is None:
                 continue
@@ -126,7 +126,7 @@ class PartBuilder():
                     "PartBuilder build pipeline_pre_tests part file for CI/CD part ({}) is missing".format(part))
             # do the building for before_install
 
-    def build_pipeline_tests(self, name, pipeline, parts=[], parts_path):
+    def build_pipeline_tests(self, name, pipeline, parts={}, parts_path):
         """
             builds the before_install section to build containers for testing
 
@@ -149,7 +149,7 @@ class PartBuilder():
                     "PartBuilder build_pipeline_tests part file for CI/CD part ({}) is missing".format(part))
             # do the building for before_install
 
-    def build_pipeline_deploy(self, name, pipeline, parts=[], parts_path):
+    def build_pipeline_deploy(self, name, pipeline, parts={}, parts_path):
         """
             builds the before_install section to build containers for testing
 

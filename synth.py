@@ -184,12 +184,12 @@ def create(name, frontend, backend, database, cache, pipeline):
     if pipeline is not None:
         try:
             # add and build pipeline yaml file
-            pb.build_pipeline(name, pipeline, [
-                frontend,
-                backend,
-                database,
-                cache
-            ])
+            pb.build_pipeline(name, pipeline, {
+                frontend: frontend,
+                backend: backend,
+                database: database,
+                cache: cache
+            })
 
         except PartBuilderException as e:
             # error out if pipeline isn't allowed
