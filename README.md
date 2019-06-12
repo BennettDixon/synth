@@ -1,3 +1,5 @@
+![synth logo](assets/logo.png)
+
 # synth - a Docker bootstrapping tool
 
 Inspired by how long it can take to set up the development of web apps, synth is a tool to help you build modular sets of Docker files, Docker Compose files, directory trees, and wireframed files for different web frameworks. synth can help you set up your next web application project in seconds, allowing you to start coding your idea with zero hassle.
