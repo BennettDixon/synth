@@ -154,7 +154,6 @@ class PartBuilder():
             config_data.extend(part_data)
 
         for part_name, part in parts.items():
-            print("{}: {}".format(part_name, part))
             # all parts passed by default, some None
             # no need to deploy/test cache or database as image is just the official image, no customizations for prod
             # also dynamic and static don't have default tests
@@ -163,8 +162,6 @@ class PartBuilder():
             # skip if file is missing (not set up)
             # part_name is used here because not specific part files, just frontend or backend
             if not self.isfile_check("{}/{}.part".format(parts_path, part_name)):
-                print(
-                    'WARNING: file not found in build_pipeline_section_pre_tests ({})'.format(part_name))
                 continue
             # do the building for before_install
             # again part_name is used due to directory name scheme
@@ -205,8 +202,6 @@ class PartBuilder():
                 continue
             # skip if file is missing (not set up)
             if not self.isfile_check("{}/{}.part".format(parts_path, part)):
-                print(
-                    'WARNING: file not found in build_pipeline_section_tests ({})'.format(part))
                 continue
             # do the building for before_install
             with open("{}/{}.part".format(parts_path, part), 'r') as file:
@@ -255,8 +250,6 @@ class PartBuilder():
                 continue
             # skip if file is missing (not set up)
             if not self.isfile_check("{}/{}.part".format(build_dir, part_name)):
-                print(
-                    'WARNING: file not found in build_pipeline_section_deploy ({})'.format(part_name))
                 continue
             # add the build stage for the part
             with open("{}/{}.part".format(build_dir, part_name), 'r') as file:
@@ -277,8 +270,6 @@ class PartBuilder():
                 continue
             # skip if file is missing (not set up)
             if not self.isfile_check("{}/{}.part".format(push_dir, part_name)):
-                print(
-                    'WARNING: file not found in build_pipeline_section_deploy ({})'.format(part))
                 continue
             with open("{}/{}.part".format(push_dir, part_name), 'r') as file:
                 part_data = file.readlines()
@@ -343,8 +334,6 @@ class PartBuilder():
             updates the compose file after adding a part if its a backend by adding
             neccessary environmental variables and depends_on sections
         """
-        print(
-            'debug: PartBuilder adding depends_on and env content for compose section')
         if (database not in self.allowed_databases and cache not in self.allowed_caches):
             raise PartBuilderException(
                 "backend_compose_update failed because database or cache not in allowed services"
@@ -399,9 +388,6 @@ class PartBuilder():
         if self.isfile_check(part_path) is False:
             raise PartBuilderException(
                 "{} is not a file or did not exist.".format(part_path))
-        # TODO add the actual append logic
-        print('debug: adding compose portion for{} in file {}'.format(
-            part_path, config_path))
         # read the part file and config file text
         with open(part_path, 'r') as part_file:
             part_data = part_file.readlines()
@@ -431,8 +417,6 @@ class PartBuilder():
         # skip if it's not present (not an error b/c database and cache are always not present)
         if self.isfile_check(part_path) is False:
             return None
-        print('debug: adding upstream portion for {} in file {}'.format(
-            part_path, config_path))
         # read the part file and config file text
         with open(part_path, 'r') as part_file:
             part_data = part_file.readlines()
@@ -462,9 +446,6 @@ class PartBuilder():
         # skip if it's not present (not an error b/c database and cache are always not present)
         if self.isfile_check(part_path) is False:
             return None
-        # TODO add the actual append logic
-        print('debug, trial: adding location portion for {} in file {}'.format(
-            part_path, config_path))
         # read the part data and the nginx config default data
         with open(part_path, 'r') as part_file:
             part_data = part_file.readlines()
