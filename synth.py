@@ -96,10 +96,7 @@ def create(name, frontend, backend, database, cache, pipeline):
         back_enabled = True
     # build PartBuilder instance
     pb = PartBuilder(parts_root="/etc/synth/parts",
-                     nginx_file="{}/nginx_router/nginx_conf/default.conf"
-                     .format(name),
-                     compose_file="{}/docker-compose.yml"
-                     .format(name),
+                     name,
                      front_enabled=front_enabled,
                      back_enabled=back_enabled)
 
