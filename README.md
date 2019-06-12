@@ -1,4 +1,4 @@
-![synth logo](assets/logo.png)
+![synth logo](assets/synth_logo.png)
 
 # synth - a Docker bootstrapping tool
 
