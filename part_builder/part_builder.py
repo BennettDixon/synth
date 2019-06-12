@@ -92,7 +92,6 @@ class PartBuilder():
                 pipeline: pipeline being used (travis or CircleCI)
                 parts: list of parts for project
         """
-        travis_parts = self.parts_root + "/travis"
         if len(parts) == 0:
             raise PartBuilderException(
                 'PartBuilder cannot build CI/CD pipeline with no parts provided')
@@ -110,7 +109,7 @@ class PartBuilder():
                 pipeline: pipeline being used (travis or CircleCI)
                 parts: list of parts to test
         """
-        travis_parts = self.parts_root + "/travis"
+        parts_path = self.parts_root + "/{}".format(pipeline)
         if len(parts) == 0:
             raise PartBuilderException(
                 'PartBuilder build_pipeline_pre_tests cannot build CI/CD pipeline with no parts provided')
@@ -119,7 +118,7 @@ class PartBuilder():
             # all parts passed by default, some None
             if part is None:
                 continue
-            if not self.isfile_check("{}/{}".format(travis_parts, part)):
+            if not self.isfile_check("{}/{}".format(parts_path, part)):
                 raise PartBuilderException(
                     "PartBuilder build pipeline_pre_tests part file for CI/CD part ({}) is missing".format(part))
             # do the building for before_install
@@ -133,7 +132,7 @@ class PartBuilder():
                 pipeline: pipeline being used (travis or CircleCI)
                 parts: list of parts to test
         """
-        travis_parts = self.parts_root + "/travis"
+        parts_path = self.parts_root + "/{}".format(pipeline)
         if len(parts) == 0:
             raise PartBuilderException(
                 'PartBuilder build_pipeline_tests cannot build CI/CD pipeline with no parts provided')
@@ -142,7 +141,7 @@ class PartBuilder():
             # all parts passed by default, some None
             if part is None:
                 continue
-            if not self.isfile_check("{}/{}".format(travis_parts, part)):
+            if not self.isfile_check("{}/{}".format(parts_path, part)):
                 raise PartBuilderException(
                     "PartBuilder build_pipeline_tests part file for CI/CD part ({}) is missing".format(part))
             # do the building for before_install
@@ -156,7 +155,7 @@ class PartBuilder():
                 pipeline: pipeline being used (travis or CircleCI)
                 parts: list of parts to test
         """
-        travis_parts = self.parts_root + "/travis"
+        parts_path = self.parts_root + "/{}".format(pipeline)
         if len(parts) == 0:
             raise PartBuilderException(
                 'PartBuilder build_pipeline_deploy cannot build CI/CD pipeline with no parts provided')
@@ -165,7 +164,7 @@ class PartBuilder():
             # all parts passed by default, some None
             if part is None:
                 continue
-            if not self.isfile_check("{}/{}".format(travis_parts, part)):
+            if not self.isfile_check("{}/{}".format(parts_path, part)):
                 raise PartBuilderException(
                     "PartBuilder build_pipeline_tests part file for CI/CD part ({}) is missing".format(part))
             # do the building for before_install
