@@ -96,11 +96,13 @@ class PartBuilder():
             raise PartBuilderException(
                 'PartBuilder cannot build CI/CD pipeline with no parts provided')
 
-        self.build_pipeline_pre_tests(name, pipeline, parts)
-        self.build_pipeline_tests(name, pipeline, parts)
-        self.build_pipeline_deploy(name, pipeline, parts)
+        parts_path = "{}/pipeline/{}".format(self.parts_root, pipeline)
 
-    def build_pipeline_pre_tests(self, name, pipeline, parts=[]):
+        self.build_pipeline_pre_tests(name, pipeline, parts, parts_path)
+        self.build_pipeline_tests(name, pipeline, parts, parts_path)
+        self.build_pipeline_deploy(name, pipeline, parts, parts_path)
+
+    def build_pipeline_pre_tests(self, name, pipeline, parts=[], parts_path):
         """
             builds the before_install section to build containers for testing
 
@@ -108,6 +110,7 @@ class PartBuilder():
                 name: name of the project, used for tagging docker builds
                 pipeline: pipeline being used (travis or CircleCI)
                 parts: list of parts to test
+                parts_path: path to pipeline parts location
         """
         parts_path = self.parts_root + "/{}".format(pipeline)
         if len(parts) == 0:
@@ -123,7 +126,7 @@ class PartBuilder():
                     "PartBuilder build pipeline_pre_tests part file for CI/CD part ({}) is missing".format(part))
             # do the building for before_install
 
-    def build_pipeline_tests(self, name, pipeline, parts=[]):
+    def build_pipeline_tests(self, name, pipeline, parts=[], parts_path):
         """
             builds the before_install section to build containers for testing
 
@@ -131,8 +134,8 @@ class PartBuilder():
                 name: name of the project, used for tagging docker builds
                 pipeline: pipeline being used (travis or CircleCI)
                 parts: list of parts to test
+                parts_path: path to pipeline parts location
         """
-        parts_path = self.parts_root + "/{}".format(pipeline)
         if len(parts) == 0:
             raise PartBuilderException(
                 'PartBuilder build_pipeline_tests cannot build CI/CD pipeline with no parts provided')
@@ -146,7 +149,7 @@ class PartBuilder():
                     "PartBuilder build_pipeline_tests part file for CI/CD part ({}) is missing".format(part))
             # do the building for before_install
 
-    def build_pipeline_deploy(self, name, pipeline, parts=[]):
+    def build_pipeline_deploy(self, name, pipeline, parts=[], parts_path):
         """
             builds the before_install section to build containers for testing
 
@@ -154,8 +157,8 @@ class PartBuilder():
                 name: name of the project, used for tagging docker builds
                 pipeline: pipeline being used (travis or CircleCI)
                 parts: list of parts to test
+                parts_path: path to pipeline
         """
-        parts_path = self.parts_root + "/{}".format(pipeline)
         if len(parts) == 0:
             raise PartBuilderException(
                 'PartBuilder build_pipeline_deploy cannot build CI/CD pipeline with no parts provided')
