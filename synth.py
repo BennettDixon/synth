@@ -96,7 +96,7 @@ def create(name, frontend, backend, database, cache, pipeline):
         back_enabled = True
     # build PartBuilder instance
     pb = PartBuilder(parts_root="/etc/synth/parts",
-                     name,
+                     project_name=name,
                      front_enabled=front_enabled,
                      back_enabled=back_enabled)
 
@@ -182,13 +182,13 @@ def create(name, frontend, backend, database, cache, pipeline):
         try:
             # add and build pipeline yaml file
             pb.build_pipeline(name, pipeline, {
-                frontend: frontend,
-                backend: backend,
-                database: database,
-                cache: cache
+                "frontend": frontend,
+                "backend": backend,
+                "database": database,
+                "cache": cache
             })
 
-        except PartBuilderException as e:
+        except PartBuilderException as desc_e:
             # error out if pipeline isn't allowed
             click.echo("PartBuilderException: {}".format(desc_e))
             cleanup(name)
