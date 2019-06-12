@@ -37,10 +37,10 @@ def cli():
 @click.option("--cache",
               default=None,
               help="caching service to use")
-@click.option("--cicd",
+@click.option("--pipeline",
               default=None,
-              help="ci/cd service to use")
-def create(name, frontend, backend, database, cache, cicd):
+              help="ci/cd pipeline to use")
+def create(name, frontend, backend, database, cache, pipeline):
     """ creates a synth wireframe with your desired frontend,
     backend, and database
     """
@@ -180,14 +180,14 @@ def create(name, frontend, backend, database, cache, cicd):
             traceback.print_tb(e.__traceback__)
             cleanup(name)
 
-    #<--- CI/CD SECTION --->#
-    if cicd is not None:
+    #<--- PIPELINE SECTION --->#
+    if pipeline is not None:
         try:
-            # add CI/CD section to docker-compose file
-            pb.add_part(cicd)
+            # add and build pipeline yaml file
+            pb.build_pipeline(pipeline)
 
         except PartBuilderException as e:
-            # error out if CI/CD service isn't allowed
+            # error out if pipeline isn't allowed
             click.echo("PartBuilderException: {}".format(desc_e))
             cleanup(name)
 
