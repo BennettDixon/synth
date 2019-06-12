@@ -1,0 +1,26 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t bennettdixon16/proj_name-frontend-test -f ./client/Dockerfile.dev ./client
+  # more builds for diff images to test can be added here
+
+script:
+  # -- --coverage is needed to exit upon npm test completion
+  - docker run bennettdixon16/proj_name-frontend-test npm test -- --coverage
+  # more tests can be added here for diff images
+
+after_success:
+  # build our prod docker images for pushing to hub
+  - docker build -t bennettdixon16/proj_name-router ./nginx
+  - docker build -t bennettdixon16/proj_name-frontend ./client
+  - docker build -t bennettdixon16/proj_name-backend ./server
+  - docker build -t bennettdixon16/proj_name-worker ./worker
+  # log in to the docker hub CLI using travis secrets
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # push images to docker hub
+  - docker push bennettdixon16/proj_name-router
+  - docker push bennettdixon16/proj_name-frontend
+  - docker push bennettdixon16/proj_name-backend
+  - docker push bennettdixon16/proj_name-worker

@@ -82,6 +82,95 @@ class PartBuilder():
             return False
         return os.path.isfile(path)
 
+    # ---> pipeline build section <---
+    def build_pipeline(self, name, pipeline, parts=[]):
+        """
+            builds the config file for the ci / cd selected by user for the parts provided
+
+            Based on:
+                name: name of the project, used for tagging docker builds
+                pipeline: pipeline being used (travis or CircleCI)
+                parts: list of parts for project
+        """
+        travis_parts = self.parts_root + "/travis"
+        if len(parts) == 0:
+            raise PartBuilderException(
+                'PartBuilder cannot build CI/CD pipeline with no parts provided')
+
+        self.build_pipeline_pre_tests(name, pipeline, parts)
+        self.build_pipeline_tests(name, pipeline, parts)
+        self.build_pipeline_deploy(name, pipeline, parts)
+
+    def build_pipeline_pre_tests(self, name, pipeline, parts=[]):
+        """
+            builds the before_install section to build containers for testing
+
+            Base on:
+                name: name of the project, used for tagging docker builds
+                pipeline: pipeline being used (travis or CircleCI)
+                parts: list of parts to test
+        """
+        travis_parts = self.parts_root + "/travis"
+        if len(parts) == 0:
+            raise PartBuilderException(
+                'PartBuilder build_pipeline_pre_tests cannot build CI/CD pipeline with no parts provided')
+
+        for part in parts:
+            # all parts passed by default, some None
+            if part is None:
+                continue
+            if not self.isfile_check("{}/{}".format(travis_parts, part)):
+                raise PartBuilderException(
+                    "PartBuilder build pipeline_pre_tests part file for CI/CD part ({}) is missing".format(part))
+            # do the building for before_install
+
+    def build_pipeline_tests(self, name, pipeline, parts=[]):
+        """
+            builds the before_install section to build containers for testing
+
+            Base on:
+                name: name of the project, used for tagging docker builds
+                pipeline: pipeline being used (travis or CircleCI)
+                parts: list of parts to test
+        """
+        travis_parts = self.parts_root + "/travis"
+        if len(parts) == 0:
+            raise PartBuilderException(
+                'PartBuilder build_pipeline_tests cannot build CI/CD pipeline with no parts provided')
+
+        for part in parts:
+            # all parts passed by default, some None
+            if part is None:
+                continue
+            if not self.isfile_check("{}/{}".format(travis_parts, part)):
+                raise PartBuilderException(
+                    "PartBuilder build_pipeline_tests part file for CI/CD part ({}) is missing".format(part))
+            # do the building for before_install
+
+    def build_pipeline_deploy(self, name, pipeline, parts=[]):
+        """
+            builds the before_install section to build containers for testing
+
+            Base on:
+                name: name of the project, used for tagging docker builds
+                pipeline: pipeline being used (travis or CircleCI)
+                parts: list of parts to test
+        """
+        travis_parts = self.parts_root + "/travis"
+        if len(parts) == 0:
+            raise PartBuilderException(
+                'PartBuilder build_pipeline_deploy cannot build CI/CD pipeline with no parts provided')
+
+        for part in parts:
+            # all parts passed by default, some None
+            if part is None:
+                continue
+            if not self.isfile_check("{}/{}".format(travis_parts, part)):
+                raise PartBuilderException(
+                    "PartBuilder build_pipeline_tests part file for CI/CD part ({}) is missing".format(part))
+            # do the building for before_install
+
+    # ---> nginx and compose build section <---
     def add_part(self, part=None, database=None, cache=None):
         """
             adds a part to compose and nginx files based on a string passed
