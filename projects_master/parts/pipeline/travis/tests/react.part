@@ -1,0 +1,3 @@
+  # -- --coverage is needed to exit upon npm test completion
+  - docker run "$DOCKER_ID/{}-frontend-test" npm test -- --coverage
+
