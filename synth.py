@@ -42,7 +42,7 @@ def cli():
               help="ci/cd pipeline to use")
 def create(name, frontend, backend, database, cache, pipeline):
     """ creates a synth wireframe with your desired frontend,
-    backend, and database
+    backend, database, caching service, and ci/cd pipeline
     """
     copy_dir = "/etc/synth/projects_master/nginx_router/"
 
@@ -194,7 +194,7 @@ def create(name, frontend, backend, database, cache, pipeline):
             cleanup(name)
 
     click.echo("\nsynthesized project directory {}".format(name))
-    click.echo("run:\n\n\tcd {}; docker-compose up --build\n"
+    click.echo("run:\n\n\tcd {}; docker-compose up\n"
                .format(name))
     click.echo("to start your development containers!\n")
 
