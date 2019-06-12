@@ -184,7 +184,7 @@ def create(name, frontend, backend, database, cache, pipeline):
     if pipeline is not None:
         try:
             # add and build pipeline yaml file
-            pb.build_pipeline(pipeline, [
+            pb.build_pipeline(name, pipeline, [
                 frontend,
                 backend,
                 database,
