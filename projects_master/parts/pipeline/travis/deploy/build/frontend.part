@@ -1,0 +1,2 @@
+  - docker build -t "$DOCKER_ID/{}-frontend" ./nginx_router/frontend
+

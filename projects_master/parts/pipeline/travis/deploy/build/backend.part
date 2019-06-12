@@ -1,0 +1,1 @@
+  - docker build -t "$DOCKER_ID/{}-backend" ./nginx_router/backend

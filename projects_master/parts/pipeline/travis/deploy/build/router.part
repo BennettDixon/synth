@@ -1,0 +1,2 @@
+  - docker build -t "$DOCKER_ID/{}-nginx_router" ./nginx_router
+
