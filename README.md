@@ -56,7 +56,7 @@ Your backend framework. Currently supported options are `flask`, `node`, `django
 --database
 ```
 
-Your choice of database. Currently supported options are `mysql`, `postgres`, `mongo`.
+Your choice of database. Currently supported options are `mysql`, `postgres`, `mongo`, `mariadb`.
 
 ```
 --cache
