@@ -12,7 +12,7 @@
     <header></header>
     <h1 id="synth">synth - a Docker bootstrapping tool</h1>
 
-    <p>Inspired by how long it can take to set up the development of web apps, synth is a tool to help you build modular sets of Docker files, Docker Compose files, directory trees, and wireframed files for different web frameworks. synth can help you set up your next web application project in seconds, allowing you to start coding your idea with zero hassle.</p>
+    <p>Inspired by how long it can take to set up the development of web apps, synth is a tool to help you build modular sets of Docker, Docker Compose, and CI/CD pipeline config files, directory trees, and wireframed files for different web frameworks. synth can help you set up your next web application project in seconds, allowing you to start coding your idea with zero hassle.</p>
 
     <h2 id="start">&#x1F3C3 Getting Started</h2>
 
@@ -54,25 +54,31 @@
     <pre><code>--frontend
     </code></pre>
 
-    <pre><code>Your frontend framework. Options are `static` (default), `node`, `react`. Defaults to `static`.
+    <pre><code>Your frontend framework. Currently supported options are `static`, `dynamic`, `react`.
     </code></pre>
 
     <pre><code>--backend
     </code></pre>
 
-    <pre><code>Your backend framework. Options are `flask`, `node`, `django`.
+    <pre><code>Your backend framework. Currently supported options are `flask`, `node`, `django`.
     </code></pre>
 
     <pre><code>--database
     </code></pre>
 
-    <pre><code>Your choice of database. Options are `mysql`, `postgres`, `mongo`.
+    <pre><code>Your choice of database. Currently supported options are `mysql`, `postgres`, `mongo`, `mariadb`.
     </code></pre>
 
     <pre><code>--cache
     </code></pre>
 
     <pre><code>Your choice of caching tool. Options are `redis` and `memcache`.
+    </code></pre>
+
+    <pre><code>--pipeline
+    </code></pre>
+
+    <pre><code>Your choice of CI/CD pipeline. `travis` is currently the only supported option.
     </code></pre>
 
     <h2 id="bookscodingstyletests">&#x1F4DA Coding Style Tests</h2>
