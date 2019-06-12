@@ -1,1 +1,1 @@
-  - docker run "$DOCKER_ID/{}-backend-test" python3 -m unittest discover tests
+  - docker run -e CI=true "$DOCKER_ID/{}-backend-test" python3 -m unittest discover tests

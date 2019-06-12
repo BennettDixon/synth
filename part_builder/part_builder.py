@@ -23,7 +23,7 @@ class PartBuilder():
     allowed_databases = ['mongo', 'postgres', 'mysql', 'mariadb']
     allowed_caches = ['redis', 'memcached']
 
-    def __init__(self, parts_root=None, nginx_file=None, compose_file=None, front_enabled=False, back_enabled=False):
+    def __init__(self, parts_root=None, project_name=None, front_enabled=False, back_enabled=False):
         """
             Init method for class, sets important path information
         """
@@ -31,20 +31,22 @@ class PartBuilder():
         self.str_check(
             parts_root, "root to parts directory must be of type string in PartBuilder init function")
         self.str_check(
-            nginx_file, "default.conf file for NGINX router must be of type string in PartBuilder init function")
-        self.str_check(
-            compose_file, "compose file must be of type string in PartBuilder init function")
-        if not self.isfile_check:
-            raise PartBuilderException(
-                nginx_file, "{} is not a file or does not exist".format(nginx_file))
-        if not self.isfile_check:
-            raise PartBuilderException(
-                compose_file, "{} is not a file or does not exist".format(
-                    compose_file)
-            )
+            project_name, "default.conf file for NGINX router must be of type string in PartBuilder init function")
 
-        # if all is good we got here without raising an exception, set instance to init info
+        nginx_file = "{}/nginx_router/nginx_conf/default.conf".format(
+            project_name)
+        compose_file = "{}/docker-compose.yml".format(project_name)
+
+        if not self.isfile_check(nginx_file):
+            raise PartBuilderException(
+                "{} is not a file or does not exist".format(nginx_file))
+        if not self.isfile_check(compose_file):
+            raise PartBuilderException(
+                "{} is not a file or does not exist".format(compose_file))
+
+            # if all is good we got here without raising an exception, set instance to init info
         self.parts_root = parts_root
+        self.project_name = project_name
         self.nginx_file = nginx_file
         self.compose_file = compose_file
         self.allowed_master = []
@@ -92,85 +94,198 @@ class PartBuilder():
                 pipeline: pipeline being used (travis or CircleCI)
                 parts: list of parts for project
         """
-        if len(parts) == 0:
+        if (len(parts) == 0) or (parts.values() == [None for tmp in range(len(parts.values()))]):
             raise PartBuilderException(
                 'PartBuilder cannot build CI/CD pipeline with no parts provided')
 
         parts_path = "{}/pipeline/{}".format(self.parts_root, pipeline)
+        base_part_path = "{}/base.part".format(parts_path)
+        config_path = None
 
-        self.build_pipeline_pre_tests(name, pipeline, parts, parts_path)
-        self.build_pipeline_tests(name, pipeline, parts, parts_path)
-        self.build_pipeline_deploy(name, pipeline, parts, parts_path)
+        if pipeline == 'travis':
+            config_path = "{}/.travis.yml".format(self.project_name)
+        else:
+            raise PartBuilderException(
+                "Pipeline ({}) is not yet configured for synth!")
 
-    def build_pipeline_pre_tests(self, name, pipeline, parts={}, parts_path):
+        # build the base of the config file for chosen CI/CD framework
+        with open(base_part_path, 'r') as base_part:
+            part_data = base_part.readlines()
+        with open(config_path, 'w') as new_config:
+            new_config.writelines(part_data)
+
+        # build the rest of the config file
+        self.build_pipeline_section_pre_tests(
+            pipeline, parts, parts_path, config_path)
+        self.build_pipeline_section_tests(
+            pipeline, parts, parts_path, config_path)
+        self.build_pipeline_section_deploy(
+            pipeline, parts, parts_path, config_path)
+        with open(config_path, 'r') as cur_config:
+            conf_data = cur_config.readlines()
+        new_data = []
+        for line in conf_data:
+            line = line.format(self.project_name)
+            new_data.append(line)
+        with open(config_path, 'w') as new_config:
+            new_config.writelines(new_data)
+
+    # should not be used outside of class
+    def build_pipeline_section_pre_tests(self, pipeline, parts, parts_path, config_path):
         """
             builds the before_install section to build containers for testing
 
             Base on:
-                name: name of the project, used for tagging docker builds
                 pipeline: pipeline being used (travis or CircleCI)
                 parts: list of parts to test
                 parts_path: path to pipeline parts location
+                config_path: path to config file for pipeline
+                             e.g: .travis.yml
         """
-        parts_path = self.parts_root + "/{}".format(pipeline)
-        if len(parts) == 0:
-            raise PartBuilderException(
-                'PartBuilder build_pipeline_pre_tests cannot build CI/CD pipeline with no parts provided')
+        # grab current config data from file so its not overwritten,
+        # more efficient than constantly writing to the file with append mode in loop
+        parts_path += "/pre_tests"
+        config_data = []
+        with open(config_path, 'r') as base_config:
+            config_data = base_config.readlines()
 
-        for part_name, part in parts.values():
+        with open("{}/base.part".format(parts_path), 'r') as base_part:
+            part_data = base_part.readlines()
+            config_data.extend(part_data)
+
+        for part_name, part in parts.items():
+            print("{}: {}".format(part_name, part))
             # all parts passed by default, some None
-            if part is None:
+            # no need to deploy/test cache or database as image is just the official image, no customizations for prod
+            # also dynamic and static don't have default tests
+            if part is None or part_name == "cache" or part_name == "database" or part in ['dynamic', 'static']:
                 continue
-            if not self.isfile_check("{}/{}".format(parts_path, part)):
-                raise PartBuilderException(
-                    "PartBuilder build pipeline_pre_tests part file for CI/CD part ({}) is missing".format(part))
+            # skip if file is missing (not set up)
+            # part_name is used here because not specific part files, just frontend or backend
+            if not self.isfile_check("{}/{}.part".format(parts_path, part_name)):
+                print(
+                    'WARNING: file not found in build_pipeline_section_pre_tests ({})'.format(part_name))
+                continue
             # do the building for before_install
+            # again part_name is used due to directory name scheme
+            with open("{}/{}.part".format(parts_path, part_name), 'r') as file:
+                part_data = file.readlines()
+                config_data.extend(part_data)
 
-    def build_pipeline_tests(self, name, pipeline, parts={}, parts_path):
+        with open(config_path, 'w') as new_config:
+            new_config.writelines(config_data)
+
+    # should not be used outside of class
+    def build_pipeline_section_tests(self, pipeline, parts, parts_path, config_path):
         """
             builds the before_install section to build containers for testing
 
             Base on:
-                name: name of the project, used for tagging docker builds
                 pipeline: pipeline being used (travis or CircleCI)
                 parts: list of parts to test
                 parts_path: path to pipeline parts location
+                config_path: path to config file for pipeline
+                             e.g: .travis.yml
         """
-        if len(parts) == 0:
-            raise PartBuilderException(
-                'PartBuilder build_pipeline_tests cannot build CI/CD pipeline with no parts provided')
+        # grab current config data from file so its not overwritten,
+        # more efficient than constantly writing to the file with append mode in loop
+        parts_path += "/tests"
+        config_data = []
+        with open(config_path, 'r') as base_config:
+            config_data = base_config.readlines()
 
-        for part in parts:
+        with open("{}/base.part".format(parts_path), 'r') as base_part:
+            part_data = base_part.readlines()
+            config_data.extend(part_data)
+
+        for part_name, part in parts.items():
             # all parts passed by default, some None
-            if part is None:
+            # no need to deploy/test cache or database as image is just the official image, no customizations for prod
+            if part is None or part_name == "cache" or part_name == "database":
                 continue
-            if not self.isfile_check("{}/{}".format(parts_path, part)):
-                raise PartBuilderException(
-                    "PartBuilder build_pipeline_tests part file for CI/CD part ({}) is missing".format(part))
+            # skip if file is missing (not set up)
+            if not self.isfile_check("{}/{}.part".format(parts_path, part)):
+                print(
+                    'WARNING: file not found in build_pipeline_section_tests ({})'.format(part))
+                continue
             # do the building for before_install
+            with open("{}/{}.part".format(parts_path, part), 'r') as file:
+                part_data = file.readlines()
+                config_data.extend(part_data)
 
-    def build_pipeline_deploy(self, name, pipeline, parts={}, parts_path):
+        with open(config_path, 'w') as new_config:
+            new_config.writelines(config_data)
+
+    # should not be used outside of class
+    # TODO implement
+    def build_pipeline_section_deploy(self, pipeline, parts, parts_path, config_path):
         """
             builds the before_install section to build containers for testing
 
             Base on:
-                name: name of the project, used for tagging docker builds
                 pipeline: pipeline being used (travis or CircleCI)
                 parts: list of parts to test
-                parts_path: path to pipeline
+                parts_path: path to pipeline parts location
+                config_path: path to config file for pipeline
+                             e.g: .travis.yml
         """
-        if len(parts) == 0:
-            raise PartBuilderException(
-                'PartBuilder build_pipeline_deploy cannot build CI/CD pipeline with no parts provided')
+        # grab current config data from file so its not overwritten,
+        # more efficient than constantly writing to the file with append mode in loop
+        parts_path += "/deploy"
+        config_data = []
+        with open(config_path, 'r') as base_config:
+            config_data = base_config.readlines()
 
-        for part in parts:
+        with open("{}/base.part".format(parts_path), 'r') as base_part:
+            part_data = base_part.readlines()
+            config_data.extend(part_data)
+
+        # add the build stage for the docker deploy
+        # add the nginx router, always included
+        # not included in parts dict because dict has no order
+        build_dir = parts_path + "/build"
+        with open("{}/router.part".format(build_dir), 'r') as router_part:
+            part_data = router_part.readlines()
+            config_data.extend(part_data)
+
+        for part_name, part in parts.items():
             # all parts passed by default, some None
-            if part is None:
+            # no need to deploy/test cache or database as image is just the official image, no customizations for prod
+            if part is None or part_name == "cache" or part_name == "database":
                 continue
-            if not self.isfile_check("{}/{}".format(parts_path, part)):
-                raise PartBuilderException(
-                    "PartBuilder build_pipeline_tests part file for CI/CD part ({}) is missing".format(part))
-            # do the building for before_install
+            # skip if file is missing (not set up)
+            if not self.isfile_check("{}/{}.part".format(build_dir, part_name)):
+                print(
+                    'WARNING: file not found in build_pipeline_section_deploy ({})'.format(part_name))
+                continue
+            # add the build stage for the part
+            with open("{}/{}.part".format(build_dir, part_name), 'r') as file:
+                part_data = file.readlines()
+                config_data.extend(part_data)
+
+        # add the nginx router, always included
+        # not included in parts dict because dict has no order
+        push_dir = parts_path + "/push"
+        with open("{}/router.part".format(push_dir), 'r') as router_part:
+            part_data = router_part.readlines()
+            config_data.extend(part_data)
+        # add the push stage for docker deploy to hub
+        for part_name, part in parts.items():
+            # all parts passed by default, some None
+            # no need to deploy/test cache or database as image is just the official image, no customizations for prod
+            if part is None or part_name == "cache" or part_name == "database":
+                continue
+            # skip if file is missing (not set up)
+            if not self.isfile_check("{}/{}.part".format(push_dir, part_name)):
+                print(
+                    'WARNING: file not found in build_pipeline_section_deploy ({})'.format(part))
+                continue
+            with open("{}/{}.part".format(push_dir, part_name), 'r') as file:
+                part_data = file.readlines()
+                config_data.extend(part_data)
+
+        with open(config_path, 'w') as new_config:
+            new_config.writelines(config_data)
 
     # ---> nginx and compose build section <---
     def add_part(self, part=None, database=None, cache=None):

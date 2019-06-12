@@ -1,1 +1,1 @@
-  - docker build -t "$DOCKER_ID/{}-backend-test" -f ./backend/Dockerfile.dev ./backend
+  - docker build -t "$DOCKER_ID/{}-backend-test" -f ./nginx_router/backend/Dockerfile.dev ./nginx_router/backend
