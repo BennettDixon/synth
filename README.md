@@ -91,11 +91,11 @@ $ pep8 --version
 
 ## :pencil: Version
 
-- 0.1.0
+- 1.0.0
 
 ## Contributing
 
-See [CONTRIBUTING.md]
+See [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## :blue_book: Authors
 
