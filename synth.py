@@ -59,6 +59,8 @@ def create(name, frontend, backend, database, cache, pipeline):
     # make the directory for the project if it doesn't exist
     try:
         os.mkdir(name)
+        shutil.copyfile("/etc/synth/projects_master/README.md",
+                        "{}/README.md".format(name))
     except FileExistsError:
         click.echo('Directory {} already exists.'
                    .format(name) +
