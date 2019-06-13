@@ -32,40 +32,40 @@ Run the installer script
 sudo ./install.sh
 ```
 
-## Usage
+## :triangular_flag_on_post: Usage
 
 ```
 synth [OPTIONS]
 ```
 
-## Options
+## :hammer_and_wrench: Options
 
 ```
---frontend
+--frontend, -f
 ```
 
 Your frontend framework. Currently supported options are `static`, `dynamic`, `react`.
 
 ```
---backend
+--backend, -b
 ```
 
 Your backend framework. Currently supported options are `flask`, `node`, `django`.
 
 ```
---database
+--database, -d
 ```
 
 Your choice of database. Currently supported options are `mysql`, `postgres`, `mongo`, `mariadb`.
 
 ```
---cache
+--cache, -c
 ```
 
 Your choice of caching tool. Currently supported options are `redis` and `memcache`.
 
 ```
---pipeline
+--pipeline, -p
 ```
 
 Your choice of CI/CD pipeline. `travis` is currently the only supported option.
