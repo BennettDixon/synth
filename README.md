@@ -35,7 +35,7 @@ sudo ./install.sh
 ## :triangular_flag_on_post: Usage
 
 ```
-synth [OPTIONS]
+synth create [OPTIONS]
 ```
 
 ## :hammer_and_wrench: Options
