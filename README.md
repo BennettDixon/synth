@@ -29,7 +29,7 @@ $ git clone https://github.com/BennettDixon/synth.git
 Run the installer script
 
 ```
-./install.sh
+sudo ./install.sh
 ```
 
 ## Usage
