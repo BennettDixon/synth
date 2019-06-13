@@ -37,10 +37,10 @@ class PartBuilder():
             project_name)
         compose_file = "{}/docker-compose.yml".format(project_name)
 
-        if not self.isfile_check(nginx_file):
+        if not os.path.isfile(nginx_file):
             raise PartBuilderException(
                 "{} is not a file or does not exist".format(nginx_file))
-        if not self.isfile_check(compose_file):
+        if not os.path.isfile(compose_file):
             raise PartBuilderException(
                 "{} is not a file or does not exist".format(compose_file))
 
@@ -71,18 +71,6 @@ class PartBuilder():
             raise PartBuilderException(err_msg)
         elif type(param) != str:
             raise PartBuilderException(err_msg)
-
-    @staticmethod
-    def isfile_check(path=None):
-        """
-            Checks if a file exists at a given path
-
-            Based on:
-                path: string containing file path to check
-        """
-        if path is None:
-            return False
-        return os.path.isfile(path)
 
     # ---> pipeline build section <---
     def build_pipeline(self, name, pipeline, parts={}):
@@ -161,7 +149,7 @@ class PartBuilder():
                 continue
             # skip if file is missing (not set up)
             # part_name is used here because not specific part files, just frontend or backend
-            if not self.isfile_check("{}/{}.part".format(parts_path, part_name)):
+            if not os.path.isfile("{}/{}.part".format(parts_path, part_name)):
                 continue
             # do the building for before_install
             # again part_name is used due to directory name scheme
@@ -201,7 +189,7 @@ class PartBuilder():
             if part is None or part_name == "cache" or part_name == "database":
                 continue
             # skip if file is missing (not set up)
-            if not self.isfile_check("{}/{}.part".format(parts_path, part)):
+            if not os.path.isfile("{}/{}.part".format(parts_path, part)):
                 continue
             # do the building for before_install
             with open("{}/{}.part".format(parts_path, part), 'r') as file:
@@ -249,7 +237,7 @@ class PartBuilder():
             if part is None or part_name == "cache" or part_name == "database":
                 continue
             # skip if file is missing (not set up)
-            if not self.isfile_check("{}/{}.part".format(build_dir, part_name)):
+            if not os.path.isfile("{}/{}.part".format(build_dir, part_name)):
                 continue
             # add the build stage for the part
             with open("{}/{}.part".format(build_dir, part_name), 'r') as file:
@@ -269,7 +257,7 @@ class PartBuilder():
             if part is None or part_name == "cache" or part_name == "database":
                 continue
             # skip if file is missing (not set up)
-            if not self.isfile_check("{}/{}.part".format(push_dir, part_name)):
+            if not os.path.isfile("{}/{}.part".format(push_dir, part_name)):
                 continue
             with open("{}/{}.part".format(push_dir, part_name), 'r') as file:
                 part_data = file.readlines()
@@ -385,7 +373,7 @@ class PartBuilder():
         self.str_check(part_path, path_err)
         self.str_check(config_path, config_err)
         # all parts should have a compose portion
-        if self.isfile_check(part_path) is False:
+        if os.path.isfile(part_path) is False:
             raise PartBuilderException(
                 "{} is not a file or did not exist.".format(part_path))
         # read the part file and config file text
@@ -415,7 +403,7 @@ class PartBuilder():
         self.str_check(part_path, path_err)
         self.str_check(config_path, config_err)
         # skip if it's not present (not an error b/c database and cache are always not present)
-        if self.isfile_check(part_path) is False:
+        if os.path.isfile(part_path) is False:
             return None
         # read the part file and config file text
         with open(part_path, 'r') as part_file:
@@ -444,7 +432,7 @@ class PartBuilder():
         self.str_check(part_path, path_err)
         self.str_check(config_path, config_err)
         # skip if it's not present (not an error b/c database and cache are always not present)
-        if self.isfile_check(part_path) is False:
+        if os.path.isfile(part_path) is False:
             return None
         # read the part data and the nginx config default data
         with open(part_path, 'r') as part_file:
