@@ -6,17 +6,17 @@ Inspired by how long it can take to set up the development of web apps, synth is
 
 ## :running: Getting Started
 
-* [Ubuntu 14.04 LTS](http://releases.ubuntu.com/14.04/) - Operating system reqd.
+- [Ubuntu 14.04 LTS](http://releases.ubuntu.com/14.04/) - Operating system reqd.
 
-* [Python 3.4](https://www.python.org/downloads/release/python-340/) - Python version used
+- [Python 3.4](https://www.python.org/downloads/release/python-340/) - Python version used
 
-* [Node.js 12.3.1](https://nodejs.org/en/download/current/) - Node version used
+- [Node.js 12.3.1](https://nodejs.org/en/download/current/) - Node version used
 
 ## :warning: Dependencies
 
-* `docker` and `docker-compose`
+- `docker` and `docker-compose`
 
-* `python3`
+- `python3`
 
 ## :arrow_down: Installation
 
@@ -97,22 +97,23 @@ $ pep8 --version
 
 ## :pencil: Version
 
-* 0.1.0
+- 0.1.0
 
 ## Contributing
 
 See [CONTRIBUTING.md]
 
 ## :blue_book: Authors
-* **Bennett Dixon** - [@BennettDixon](https://github.com/BennettDixon)
-* **Jack Gindi** - [@jmgindi](https://github.com/jmgindi)
+
+- **Bennett Dixon** - [@BennettDixon](https://github.com/BennettDixon)
+- **Jack Gindi** - [@jmgindi](https://github.com/jmgindi)
 
 ## :mag: License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 
 ## :mega: Acknowledgments
 
-* [Holberton School](https://github.com/holbertonschool) (providing guidance)
+- [Holberton School](https://github.com/holbertonschool) (providing guidance)
 
-* [Julian Gindi](https://github.com/JulianGindi) (project mentor)
+- [Julian Gindi](https://github.com/JulianGindi) (project mentor)
