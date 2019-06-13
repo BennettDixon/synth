@@ -38,6 +38,8 @@ sudo ./install.sh
 synth create [OPTIONS]
 ```
 
+![synth demo](assets/synth_basic_demo.gif)
+
 ## :hammer_and_wrench: Options
 
 ```
