@@ -23,21 +23,27 @@ def cli():
 
 @cli.command()
 @click.option("--name",
+              "-n",
               default="my_project",
               help="name of your project")
 @click.option("--frontend",
+              "-f",
               default=None,
               help="frontend to use")
 @click.option("--backend",
+              "-b",
               default=None,
               help="backend to use")
 @click.option("--database",
+              "-d",
               default=None,
               help="database to use")
 @click.option("--cache",
+              "-c",
               default=None,
               help="caching service to use")
 @click.option("--pipeline",
+              "-p",
               default=None,
               help="ci/cd pipeline to use")
 def create(name, frontend, backend, database, cache, pipeline):
