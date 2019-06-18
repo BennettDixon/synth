@@ -5,13 +5,21 @@
     run the following to uninstall:
         pip3 uninstall part_builder
 """
-from distutils.core import setup
 from setuptools import setup
 
-setup(name='part_builder',
-  version='1.0',
-  description='PartBuilder for use with Synth ',
-  author='Bennett Dixon, Jack Gindi',
-  author_email='bennettdixon16@gmail.com, jmgindi@gmail.com',
-  packages=['part_builder'],
- ) 
+with open('README.md') as readme:
+    long_desc = readme.read()
+
+setup(
+    name='synth',
+    entry_points={
+        'console_scripts': ['synth=synth:cli'],
+    },
+    version='1.0',
+    description='Synth: a docker bootstrapping CLI tool',
+    author='Bennett Dixon, Jack Gindi',
+    author_email='bennettdixon16@gmail.com, jmgindi@gmail.com',
+    packages=['synth'],
+    long_description=long_desc,
+    include_package_data=True
+)
