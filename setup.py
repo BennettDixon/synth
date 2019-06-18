@@ -21,5 +21,5 @@ setup(
     author_email='bennettdixon16@gmail.com, jmgindi@gmail.com',
     packages=['synth'],
     long_description=long_desc,
-    include_package_data=True
+    include_package_data=True,
 )

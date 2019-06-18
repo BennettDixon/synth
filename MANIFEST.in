@@ -1,1 +1,1 @@
-include synth/projects_master
+recursive-include synth *

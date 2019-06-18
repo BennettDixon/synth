@@ -50,7 +50,8 @@ def create(name, frontend, backend, database, cache, pipeline):
     """ creates a synth wireframe with your desired frontend,
     backend, database, caching service, and ci/cd pipeline
     """
-    copy_dir = "/etc/synth/projects_master/nginx_router/"
+    root_dir = os.path.dirname(os.path.abspath(__file__))
+    copy_dir = root_dir + "/projects_master/nginx_router/"
 
     if not frontend and not backend and not database and not cache:
         click.echo("all synth services can't be None")
@@ -59,7 +60,7 @@ def create(name, frontend, backend, database, cache, pipeline):
     # make the directory for the project if it doesn't exist
     try:
         os.mkdir(name)
-        shutil.copyfile("/etc/synth/projects_master/README.md",
+        shutil.copyfile(root_dir + "/projects_master/README.md",
                         "{}/README.md".format(name))
     except FileExistsError:
         click.echo('Directory {} already exists.'
@@ -92,7 +93,8 @@ def create(name, frontend, backend, database, cache, pipeline):
     #<---        COMPOSE SECTION        --->#
     #   -  base compose file for router -   #
     #   -   gets appended to as needed  -   #
-    shutil.copyfile("/etc/synth/projects_master/docker-compose.yml",
+    shutil.copyfile(root_dir +
+                    "/projects_master/docker-compose.yml",
                     "{}/docker-compose.yml".format(name))
 
     # gather some info for the part builder
@@ -103,7 +105,7 @@ def create(name, frontend, backend, database, cache, pipeline):
     if backend is not None:
         back_enabled = True
     # build PartBuilder instance
-    pb = PartBuilder(parts_root="/etc/synth/parts",
+    pb = PartBuilder(parts_root=root_dir + "/parts",
                      project_name=name,
                      front_enabled=front_enabled,
                      back_enabled=back_enabled)
