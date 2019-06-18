@@ -11,11 +11,15 @@ with open('README.md') as readme:
     long_desc = readme.read()
 
 setup(
-    name='synth',
+    name='boot-synth',
     entry_points={
         'console_scripts': ['synth=synth:cli'],
     },
-    version='1.0',
+    install_requires=[
+        'click'
+    ],
+    version='1.1',
+    licence='MIT',
     description='Synth: a docker bootstrapping CLI tool',
     author='Bennett Dixon, Jack Gindi',
     author_email='bennettdixon16@gmail.com, jmgindi@gmail.com',

@@ -18,10 +18,10 @@ Clone the repository into a new directory
 $ git clone https://github.com/BennettDixon/synth.git
 ```
 
-Run the installer script
+Install via pip:
 
 ```
-sudo ./install.sh
+pip3 install boot-synth
 ```
 
 ## :triangular_flag_on_post: Usage
@@ -104,7 +104,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## :mag: License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+This project is licensed under the MIT License - see the [LICENSE](LICENSE.txt) file for details
 
 ## :mega: Acknowledgments
 
