@@ -7,24 +7,13 @@
 """
 from setuptools import setup
 
-with open('README.md') as readme:
-    long_desc = readme.read()
-
 setup(
-    name='boot-synth',
-    entry_points={
-        'console_scripts': ['synth=synth:cli'],
-    },
-    install_requires=[
-        'click',
-        'synth-part-builder'
-    ],
-    version='1.1.1',
+    name='synth_part_builder',
+    version='1.1',
     licence='MIT',
-    description='Synth: a docker bootstrapping CLI tool',
+    description='Synth: a docker bootstrapping CLI tool (part builder)',
     author='Bennett Dixon, Jack Gindi',
     author_email='bennettdixon16@gmail.com, jmgindi@gmail.com',
-    packages=['synth'],
-    long_description=long_desc,
+    packages=['synth_part_builder'],
     include_package_data=True,
 )

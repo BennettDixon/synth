@@ -7,8 +7,8 @@
 
 import click
 import os
-from part_builder import PartBuilder
-from part_builder import PartBuilderException
+from synth_part_builder import PartBuilder
+from synth_part_builder import PartBuilderException
 import shutil
 import traceback
 
