@@ -12,12 +12,6 @@ Inspired by how long it can take to set up the development of web apps, synth is
 
 ## :arrow_down: Installation
 
-Clone the repository into a new directory
-
-```
-$ git clone https://github.com/BennettDixon/synth.git
-```
-
 Install via pip:
 
 ```
