@@ -96,7 +96,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md)
 ## :blue_book: Authors
 
 - **Bennett Dixon** - [@BennettDixon](https://github.com/BennettDixon) - [Portfolio](https://bencodesit.com)
-- **Jack Gindi** - [@jmgindi](https://github.com/jmgindi)
+- **Jack Gindi** - [@jmgindi](https://github.com/jmgindi) - [Portfolio](https://jackgindi.com)
 
 ## :mag: License
 
