@@ -28,7 +28,9 @@ DEBUG = True
 ALLOWED_HOSTS = [
     '0.0.0.0',
     # backend is the service definition for this in docker-compose
-    'backend'
+    'backend',
+    # as with frontend
+    'frontend'
 ]
 
 # strict slashing for more info visit:

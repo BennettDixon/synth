@@ -28,7 +28,8 @@ DEBUG = False
 ALLOWED_HOSTS = [
     '0.0.0.0',
     # backend is the service definition for this in docker-compose
-    'backend'
+    'backend',
+    'frontend'
 ]
 
 # CONFIGURE CACHE CONN PARAMETERS FOR PROD
